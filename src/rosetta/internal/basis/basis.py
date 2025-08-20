@@ -4,7 +4,8 @@ import re
 import sys
 import os
 import math
-from collections import namedtuple, OrderedDict, MutableMapping
+from collections import namedtuple, OrderedDict
+from collections.abc import MutableMapping
 from itertools import product, combinations
 from itertools import combinations_with_replacement as combinations2
 ################################################################################

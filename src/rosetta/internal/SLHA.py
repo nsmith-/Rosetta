@@ -1,4 +1,5 @@
-from collections import OrderedDict, MutableMapping
+from collections import OrderedDict
+from collections.abc import MutableMapping
 from operator import itemgetter
 import sys
 import re
