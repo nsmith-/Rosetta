@@ -1,12 +1,9 @@
-eHDECAY interface of Rosetta is an example of this.
-
 # Rosetta
 
 **An operator basis translator for Standard Model effective field theory**
 
 Version 2.1, March 2017
 
----
 
 ## Description
 
@@ -78,7 +75,18 @@ Requires python 3.9 or higher.
 
 ### Package contents
 
-
+The package structure is as follows:
+```
+src/rosetta/
+├── Cards/           # Sample SLHA-style parameter cards for different bases and flavor options
+├── bases/           # Operator basis implementations (e.g. HiggsBasis.py, WarsawBasis.py, SILHBasis.py, etc.)
+├── interfaces/      # Interfaces to external tools and Rosetta features (e.g. eHDECAY, Lilith, EWPO, SignalStrengths, Translate)
+├── internal/        # Core logic, base classes, matrix utilities, SLHA parsing, error handling
+│   └── basis/       # Base class and utilities for basis implementations
+├── cli.py           # Main command line interface
+├── config.txt       # Configuration variables
+├── __init__.py      # Package initialization
+```
 
 **Existing basis implementations:**
 
@@ -99,7 +107,7 @@ The rosetta command line executable manages the desired functionality of the
 tool based on the implemented interfaces included in the "interfaces" directory.
 Entering in the terminal:
 
-```bash
+```sh
 rosetta -h
 ```
 
@@ -137,32 +145,32 @@ The translate interface takes an SLHA-style param card (see sample
 cards provided in Cards/ directory) in a particular basis and outputs a new 
 card in the specified basis (default is BSM Characterisation). 
 
- >> rosetta translate -h
+```sh
+rosetta translate -h
+```
 
 brings up the command line documentation:
 
- >> usage: rosetta translate [-h] [-o OUTPUT] [--ehdecay] [--dependent] [--target]
- >>                          [--flavor] [-w]
- >>                          PARAMCARD
- >> 
- >> Read in an SLHA format parameter card in a particular basis and write a new
- >> card in another implemented basis.
- >> 
- >> positional arguments:
- >>   PARAMCARD             Input parameter card.
- >> 
- >> optional arguments:
- >>   -h, --help            show this help message and exit
- >>   -o OUTPUT, --output OUTPUT
- >>                         Output file name. Default: [PARAMCARD]_new
- >>   --ehdecay             Interface with eHDECAY for Higgs branching fractions.
- >>   --dependent           Also write out dependent parameters to output card
- >>   --target              Basis into which to translate. Allowed values are:
- >>                         higgs, bsmc, template, silh, hisz, warsaw (default =
- >>                         bsmc)
- >>   --flavor              Specify flavor structure. Allowed values are: general,
- >>                         diagonal, universal (default = general).
- >>   -w, --overwrite       Overwrite any pre-existing output file.
+```
+usage: rosetta translate [-h] [-o OUTPUT] [-w] [--target ] [--flavor ] [--dependent] [--ehdecay] PARAMCARD
+
+Read in an SLHA format parameter card in a particular basis and write a new card in another implemented
+basis.
+
+positional arguments:
+  PARAMCARD            Input parameter card.
+
+options:
+  -h, --help           show this help message and exit
+  -o, --output OUTPUT  Output file name. Default: [PARAMCARD]_new
+  -w, --overwrite      Overwrite any pre-existing output file.
+  --target             Basis into which to translate. Allowed values are: bsmc, higgs, hc, higgspo, hisz,
+                       silh, template, warsaw (default = bsmc)
+  --flavor             Specify flavor structure. Allowed values are: general, diagonal, universal (default =
+                       general).
+  --dependent          Also write out dependent parameters to output card
+  --ehdecay            Interface with eHDECAY for Higgs branching fractions.
+```
 
 Rosetta will read the SLHA card, look for the 1st element of block "basis", and 
 see if any implemented basis classes have this unique identifier. If so, Rosetta 
@@ -185,12 +193,16 @@ Example basic usage:
 To translate from the SILH basis to the BSMC Lagrangian, one could take 
 Cards/SILHBasis.dat as a template input card and run:
 
-bin/rosetta translate -o my_out.dat my_input.dat
+```sh
+rosetta translate -o my_out.dat my_input.dat
+```
 
 To translate to the Warsaw basis instead, one should use the -t option and 
 specify 'warsaw' as the target basis:
- 
-bin/rosetta translate -o my_out_warsaw.dat --target warsaw my_input.dat
+
+```sh
+rosetta translate -o my_out_warsaw.dat --target warsaw my_input.dat
+```
 
 Example usage with the flavor option (See also section 8):
 
@@ -208,12 +220,16 @@ also reflects this choice on the flavor structure.
 As an example, taking Cards/WarsawBasis_diagonal.dat as a template input, the 
 command:
 
-bin/rosetta translate my_input_diagonal.dat --flavor diagonal -o my_out_diag.dat
+```sh
+rosetta translate my_input_diagonal.dat --flavor diagonal -o my_out_diag.dat
+```
 
 Will generate a BSMC param card with only the diagonal flavor 
 components non-zero. On the other hand,
 
-bin/rosetta translate my_input_diagonal.dat --target silh -flavor diagonal -o my_out_diag_silh.dat 
+```sh
+rosetta translate my_input_diagonal.dat --target silh -flavor diagonal -o my_out_diag_silh.dat
+```
 
 Will generate a SILH basis parameter card respecting the original flavor 
 structure, i.e. that of Cards/SILHBasis_diagonal.dat.
@@ -223,7 +239,9 @@ respects the flavor option specified, otherwise, Rosetta will crash.
 
 Example usage with the eHDECAY option:
 
-bin/rosetta translate my_input.dat --target silh --ehdecay -o my_out_ehdecay_silh.dat 
+```sh
+rosetta translate my_input.dat --target silh --ehdecay -o my_out_ehdecay_silh.dat 
+```
 
 This command will generate the same output as the basic usage example with the 
 addition of an SLHA decay block for the Higgs with the results of the eHDECAY 
