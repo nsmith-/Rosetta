@@ -1,11 +1,11 @@
-from .BSMCharacterisation import BSMCharacterisation
-from .HiggsBasis import HiggsBasis
-from .HiggsCharacterisation import HiggsCharacterisation
-from .HiggsPO import HiggsPO
-from .HISZ import HISZ
-from .SILHBasis import SILHBasis
-from .TemplateBasis import TemplateBasis
-from .WarsawBasis import WarsawBasis
+from . import BSMCharacterisation
+from . import HiggsBasis
+from . import HiggsCharacterisation
+from . import HiggsPO
+from . import HISZ
+from . import SILHBasis
+from . import TemplateBasis
+from . import WarsawBasis
 
 __all__ = [
     "BSMCharacterisation",
@@ -18,4 +18,4 @@ __all__ = [
     "WarsawBasis",
 ]
 
-_all_bases = {k: globals()[k] for k in __all__}
+_all_bases = {k: getattr(globals()[k], k) for k in __all__}
