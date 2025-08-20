@@ -21,10 +21,10 @@ for ch1, ch2 in comb(list(h_channels.keys()), 2):
     id1, id2 = h_channels[ch1], h_channels[ch2]
     
     if ch1==ch2:
-        ch = '4'+ch1[:len(ch1)/2]
+        ch = '4'+ch1[:len(ch1)//2]
     else:
-        ch = '2'+ch1[:len(ch1)/2]+'2'+ch2[:len(ch2)/2]
-        
+        ch = '2'+ch1[:len(ch1)//2]+'2'+ch2[:len(ch2)//2]
+
     hh_channels[ch] = (h_channels[ch1], h_channels[ch2])
 
 # allowed values for command line options
