@@ -13,17 +13,15 @@ force = False
 verbose = False
 silent = False
 ################################################################################
-dirname = os.path.dirname(__file__)
+import importlib.resources as resources
 
-# package base directory
-rosetta_root = os.path.abspath(dirname+'/../')
-
-# read config.txt
+# Find the package directory
 try:
-    with open('{}/../config.txt'.format(dirname)) as cfg:
+    # Get the config.txt file from the package
+    with resources.open_text("rosetta", "config.txt") as cfg:
         lines = [x.strip() for x in cfg.readlines()]
 except IOError:
-    err = 'error reading {}/../config.txt'.format(dirname)
+    err = 'error reading rosetta/config.txt'
     raise ReadSettingsError(err)
     
 for i,l in enumerate(lines):

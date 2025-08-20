@@ -262,13 +262,17 @@ def get_BR(MH):
     
     https://twiki.cern.ch/twiki/bin/view/LHCPhysics/CERNYellowReportPageBR2014
     '''
-    basedir = os.path.dirname(__file__)
-    
-    BRff = get_datum(MH, '{}/BR/ff.dat'.format(basedir))
-    BB, TATA, MUMU, CC, SS, TT = BRff
-    
-    BRVV = get_datum(MH, '{}/BR/VV.dat'.format(basedir))
-    GG, AA, ZA, WW, ZZ, WTOT = BRVV
+    import importlib.resources as resources
+
+    module = 'rosetta.interfaces.SignalStrengths'
+
+    with resources.path(module, 'BR/ff.dat') as path:
+        BRff = get_datum(MH, path)
+        BB, TATA, MUMU, CC, SS, TT = BRff
+
+    with resources.path(module, 'BR/VV.dat') as path:
+        BRVV = get_datum(MH, path)
+        GG, AA, ZA, WW, ZZ, WTOT = BRVV
 
     return { 
         (5,-5):BB, (15,-15):TATA, (13,-13):MUMU, 

@@ -3,16 +3,18 @@ from scipy.stats import chi2
 import os
 ################################################################################
 # read in likelihood data
-data_dir = os.path.dirname(__file__) + '/likelihood/'
-with open(data_dir+'c0.dat') as dat:
-    c0 = np.loadtxt(dat)
-with open(data_dir+'sigmainv2.dat') as dat:
-    sigmainv2 = np.loadtxt(dat)
-with open(data_dir+'c0_MFV.dat') as dat:
-    c0_MFV = np.loadtxt(dat)
-with open(data_dir+'sigmainv2_MFV.dat') as dat:
-    sigmainv2_MFV = np.loadtxt(dat)
+import importlib.resources as resources
 
+module = 'rosetta.interfaces.EWPO'
+
+with resources.open_text(module, 'likelihood/c0.dat') as dat:
+    c0 = np.loadtxt(dat)
+with resources.open_text(module, 'likelihood/sigmainv2.dat') as dat:
+    sigmainv2 = np.loadtxt(dat)
+with resources.open_text(module, 'likelihood/c0_MFV.dat') as dat:
+    c0_MFV = np.loadtxt(dat)
+with resources.open_text(module, 'likelihood/sigmainv2_MFV.dat') as dat:
+    sigmainv2_MFV = np.loadtxt(dat)
 ################################################################################
 def chisq(c):
     deltac = np.array(c) - c0
