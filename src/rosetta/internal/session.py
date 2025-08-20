@@ -201,7 +201,7 @@ once(header)
 # set up warnings
 warned = {}
 
-def showwarning(message, category, filename, lineno, line=None):
+def showwarning(message, category, filename, lineno, file=None, line=None):
     warning_name = str(category.__name__)
     try:
         warned[warning_name] += 1
@@ -221,6 +221,7 @@ def showwarning(message, category, filename, lineno, line=None):
     except AttributeError:
         verbose('    '+ warning_name +': '+str(message))
         
+# TODO: setup alternative to replacing stdlib function
 warnings.showwarning = showwarning
 
 
