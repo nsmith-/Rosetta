@@ -20,7 +20,11 @@ classifiers = [
   "Topic :: Scientific/Engineering",
 ]
 dynamic = ["version"]
-dependencies = []
+# TODO: scipy/numpy are dependencies of the EWPO interface, refactor to make optional
+dependencies = ["scipy"]
+
+[project.scripts]
+rosetta = "rosetta.cli:main"
 
 [project.optional-dependencies]
 test = [
