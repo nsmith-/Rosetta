@@ -1,3 +1,4 @@
+from rosetta.internal.basis.basis import Basis
 from . import BSMCharacterisation
 from . import HiggsBasis
 from . import HiggsCharacterisation
@@ -18,4 +19,8 @@ __all__ = [
     "WarsawBasis",
 ]
 
-_all_bases = {k: getattr(globals()[k], k) for k in __all__}
+_all_bases: dict[str, type[Basis]] = {
+    cls.name: cls
+    for cls in map(lambda mod: getattr(globals()[mod], mod), __all__)
+    if issubclass(cls, Basis)
+}
