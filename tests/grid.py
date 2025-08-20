@@ -9,9 +9,9 @@ import time
 
 sys.path.append('../')
 
-from Rosetta import HISZ as HZ
-from Rosetta.internal.basis import checkers as check
-from Rosetta.internal import settings, session
+from rosetta import HISZ as HZ
+from rosetta.internal.basis import checkers as check
+from rosetta.internal import settings, session
 
 target = 'warsaw'
 # target = 'higgs'

@@ -3,8 +3,8 @@
 import StringIO, os, argparse, sys
 sys.path.append('{}/../../'.format(os.path.dirname(__file__)))
 
-from Rosetta import session, settings
-from Rosetta.internal.parsers import set_subparsers
+from rosetta import session, settings
+from rosetta.internal.parsers import set_subparsers
 ################################################################################
 parser = argparse.ArgumentParser(
                   description=(

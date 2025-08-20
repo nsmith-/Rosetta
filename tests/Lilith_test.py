@@ -7,15 +7,15 @@ import random
 
 sys.path.append('../')
 
-from Rosetta import HiggsBasis as HB
-from Rosetta import WarsawBasis as WB
-from Rosetta import SILHBasis as SB
-from Rosetta import BSMCharacterisation as MB
-from Rosetta import TemplateBasis as TB
-from Rosetta import HISZ as HZ
-from Rosetta.internal import SLHA, session
+from rosetta import HiggsBasis as HB
+from rosetta import WarsawBasis as WB
+from rosetta import SILHBasis as SB
+from rosetta import BSMCharacterisation as MB
+from rosetta import TemplateBasis as TB
+from rosetta import HISZ as HZ
+from rosetta.internal import SLHA, session
 
-from Rosetta.interfaces.Lilith import Lilith
+from rosetta.interfaces.Lilith import Lilith
 
 # instance = HB.HiggsBasis(flavor='universal', param_card = '../HiggsBasis_universal_1e-3.dat', translate=False)
 # instance = HZ.HISZ(flavor='universal', param_card = '../HISZ_universal_1e-3.dat', translate=False)

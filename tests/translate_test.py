@@ -7,15 +7,15 @@ import random
 
 sys.path.append('../')
 
-from Rosetta import HiggsBasis as HB
-from Rosetta import WarsawBasis as WB
-from Rosetta import SILHBasis as SB
-from Rosetta import BSMCharacterisation as MB
-from Rosetta import TemplateBasis as TB
-from Rosetta import HISZ as HZ
-from Rosetta.internal import SLHA
-from Rosetta.internal.basis.io import write_param_card, write_template_card
-from Rosetta import settings
+from rosetta import HiggsBasis as HB
+from rosetta import WarsawBasis as WB
+from rosetta import SILHBasis as SB
+from rosetta import BSMCharacterisation as MB
+from rosetta import TemplateBasis as TB
+from rosetta import HISZ as HZ
+from rosetta.internal import SLHA
+from rosetta.internal.basis.io import write_param_card, write_template_card
+from rosetta import settings
 
 
 __doc__='''

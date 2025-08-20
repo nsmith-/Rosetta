@@ -7,15 +7,15 @@ import random
 
 sys.path.append('../')
 
-from Rosetta import HiggsBasis as HB
-from Rosetta import WarsawBasis as WB
-from Rosetta import SILHBasis as SB
-from Rosetta import BSMCharacterisation as MB
-from Rosetta import TemplateBasis as TB
-from Rosetta import HISZ as HZ
-from Rosetta.internal import SLHA, session
+from rosetta import HiggsBasis as HB
+from rosetta import WarsawBasis as WB
+from rosetta import SILHBasis as SB
+from rosetta import BSMCharacterisation as MB
+from rosetta import TemplateBasis as TB
+from rosetta import HISZ as HZ
+from rosetta.internal import SLHA, session
 
-from Rosetta.interfaces.EWPO.chisq import chisq, chisq_and_pvalue
+from rosetta.interfaces.EWPO.chisq import chisq, chisq_and_pvalue
 
 # dGLwl1x1 dGLwl2x2 dGLwl3x3 
 # dGLze1x1 dGLze2x2 dGLze3x3 dGRze1x1 dGRze2x2 dGRze3x3 

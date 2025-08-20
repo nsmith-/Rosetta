@@ -2,8 +2,8 @@ import sys
 
 sys.path.append('../')
 
-from Rosetta import HiggsBasis as HB
-from Rosetta.interfaces.DiHiggs import dihiggs, production_xs
+from rosetta import HiggsBasis as HB
+from rosetta.interfaces.DiHiggs import dihiggs, production_xs
 from itertools import combinations_with_replacement as comb
 
 h_channels = {'bb':(5,-5),'mumu':(13,-13), 'tautau':(15,-15), 
