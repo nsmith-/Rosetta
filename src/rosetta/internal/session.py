@@ -3,7 +3,8 @@ from . import settings
 from io import StringIO
 import textwrap
 import re
-from ..import __version__, __author__, __url__, __date__
+from .. import __author__, __url__, __date__
+from .._version import __version__
 import warnings
 
 __once = set()
