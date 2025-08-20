@@ -35,7 +35,7 @@ def compute_likelihood(basis, sqrts=8):
 def generate_input(MH, prod, decay):
     mus = []
     
-    for kp, (kd, vd) in product(prod.keys(), channels.items()):
+    for kp, (kd, vd) in product(list(prod.keys()), list(channels.items())):
         mu = prod[kp]*decay[vd]/decay['WTOT']
         mustr = '<mu prod="{}" decay="{}">{}</mu>'.format(kp, kd, mu)
         mus.append(mustr)

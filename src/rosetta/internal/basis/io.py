@@ -3,7 +3,7 @@ import os
 
 from .. import SLHA
 from .. import session
-from errors import BasisNameError, ParamCardReadError
+from .errors import BasisNameError, ParamCardReadError
 
 def read_param_card(basis, SLHAcard = None):
     '''
@@ -39,7 +39,7 @@ def read_param_card(basis, SLHAcard = None):
                 basis.blocks[name].append(par)
     
     to_add = []
-    for bname, blk in basis.card.matrices.iteritems():
+    for bname, blk in basis.card.matrices.items():
         is_cplx = basis.flavored.get(bname,{}).get('domain','')=='complex'
         if is_cplx:
             if bname.lower().startswith('im'):
@@ -51,7 +51,7 @@ def read_param_card(basis, SLHAcard = None):
 
     for part, other_part in to_add:
         blk = basis.card.matrices[part]
-        for k, v in blk.iteritems():
+        for k, v in blk.items():
             if other_part.lower().startswith('im'):
                 imname = 'R' + blk.get_name(k)[1:]
             else:
@@ -73,7 +73,7 @@ def write_param_card(basis, filename, overwrite=False):
     dec_preamble = ('\n###################################\n'
                 + '## DECAY INFORMATION\n'
                 + '###################################\n')
-    for decay in card.decays.values():
+    for decay in list(card.decays.values()):
         decay.preamble = dec_preamble
         break
 
@@ -142,7 +142,7 @@ def write_template_card(basis, filename, value=0.):
             sys.exit()          
     # newinstance = bases[basis.name](flavor=basis.flavor, dependent=False)
     newinstance = basis.__class__(flavor=basis.flavor, dependent=False)
-    for k in newinstance.keys():            
+    for k in list(newinstance.keys()):            
             try:
                 if rand:
                     newinstance[k] = complex(random.uniform(-1.,1.),

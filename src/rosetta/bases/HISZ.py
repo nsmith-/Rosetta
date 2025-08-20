@@ -32,7 +32,7 @@ class HISZ(basis.Basis):
         'HZxe': {'cname':'fe', 'kind':'general', 'domain':'complex'}
     }
 
-    independent = blocks.keys() + flavored.keys()
+    independent = list(blocks.keys()) + list(flavored.keys())
 
     required_masses = {25, 24}  # Higgs & W masses
     required_inputs = {1, 2, 3, 9} # aEWM1, Gf, aS, MW
@@ -121,7 +121,7 @@ class HISZ(basis.Basis):
         # Yukawa type interaction coefficients [eqns. (A.8) & (A.9)]
         for f in ('u','d','e'):
             matrix = 'HZx' + f
-            for i,j in H[matrix].keys(): 
+            for i,j in list(H[matrix].keys()): 
                 diag = delta(i,j)*H['fH2']/2.
                 f_Re, f_Im = H[matrix][i,j].real, H[matrix][i,j].imag
                 dy_cosphi = -(f_Re/sqrt(2.) + delta(i,j)*H['fH2']/2.)*vLsq

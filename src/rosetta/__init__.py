@@ -5,8 +5,8 @@ __date__ = '13/03/2017'
 __url__ = 'http://rosetta.hepforge.org'
 
 
-from internal.machinery import bases as implemented_bases
+from .internal.machinery import bases as implemented_bases
 
-from internal import session, settings
+from .internal import session, settings
 
-from bases import *
+from .bases import *

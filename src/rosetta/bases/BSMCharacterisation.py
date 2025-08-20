@@ -125,8 +125,8 @@ class BSMCharacterisation(basis.Basis):
         'BCxY2e': {'kind':'general', 'domain':'complex', 'cname':'dYe2'}
     }
     # All parameters independent
-    independent = ( [c for v in blocks.values() for c in v] + 
-                    [c for c in flavored.keys()] )
+    independent = ( [c for v in list(blocks.values()) for c in v] + 
+                    [c for c in list(flavored.keys())] )
 
     required_inputs = {1, 2, 3, 4}
     required_masses = {23, 24, 25}
@@ -158,7 +158,7 @@ class BSMCharacterisation(basis.Basis):
         B.fix_matrices()
         H = instance
         dipoles = ['Cdau','Cdzu']
-        for k, v in self.iteritems():
+        for k, v in self.items():
             
             is_dipole = re.match(r'Ct{0,1}dh{0,1}[a,z,g][u,d,e]\dx\d', k)
             
@@ -166,7 +166,7 @@ class BSMCharacterisation(basis.Basis):
                 try:
                     H[k] = v
                 except KeyError:
-                    print '    ' + k + ' not found in Higgs Basis definition.'
+                    print('    ' + k + ' not found in Higgs Basis definition.')
         
         # splitting dipole coefficients
         ii = complex(0.,1.)
@@ -176,7 +176,7 @@ class BSMCharacterisation(basis.Basis):
             pho, tpho = 'BCxda'+f, 'BCxtda'+f
             zed, tzed = 'BCxdz'+f, 'BCxtdz'+f
 
-            for i,j in B[zed].keys():
+            for i,j in list(B[zed].keys()):
                 if f in ('u','d'):
                     H['HBxdg'+f][i,j] = (B[glu][i,j]-ii*B[tglu][i,j])/2.
                     H['HBxdg'+f][j,i] = (B[glu][i,j]+ii*B[tglu][i,j])/2.
@@ -200,7 +200,7 @@ class BSMCharacterisation(basis.Basis):
         msg = ('dependent coefficient "{}" set to a value ({}) different from '
                'that obtained ({}) with calculate_dependent()').format
                
-        for coeff, a in self.iteritems():
+        for coeff, a in self.items():
             is_dipole = re.match(r'Ct{0,1}dh{0,1}[a,z,g][u,d,e]\dx\d', coeff)
             
             if not is_dipole:
@@ -210,7 +210,7 @@ class BSMCharacterisation(basis.Basis):
                         session.warnings.warn(msg(coeff,a,b), TranslationWarning)
                         # sys.exit()
                 except KeyError:
-                    print coeff
+                    print(coeff)
         return H
     
         

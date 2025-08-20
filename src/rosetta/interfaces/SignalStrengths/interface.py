@@ -3,8 +3,8 @@ from ...internal.basis import checkers as check
 from ...internal.errors import TranslationError
 from ...internal import session
 from ..interface import RosettaInterface, allowed_flav
-from production import production
-from decay import decay
+from .production import production
+from .decay import decay
 #
 channels = {'bb':(5,-5),'mumu':(13,-13), 'tautau':(15,-15), 
             'gammagamma':(22,22), 'ZZ':(23,23), 'WW':(24,-24)}
@@ -57,7 +57,7 @@ class SignalStrengthsInterface(RosettaInterface):
         session.drawline(text='SignalStrengths results', ignore_silent=True)
         session.stdout('  production  decay           mu ') 
         session.stdout('  ---------------------------------') 
-        for kp, (kd, vd) in product(prods.keys(), channels.items()):
+        for kp, (kd, vd) in product(list(prods.keys()), list(channels.items())):
             mu = prods[kp]*decays[vd]/decays['WTOT']
             mustr = '  {:<8}    {:<10}      {:.3f}'.format(kp, kd, mu)
             session.stdout(mustr)

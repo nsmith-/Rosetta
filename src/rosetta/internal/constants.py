@@ -1,6 +1,6 @@
 from math import sqrt
-from SLHA import NamedMatrix, CNamedMatrix
-from matrices import CTwoDMatrix
+from .SLHA import NamedMatrix, CNamedMatrix
+from .matrices import CTwoDMatrix
 from itertools import product
 ################################################################################
 __doc__ = '''
@@ -23,7 +23,7 @@ input_names = {1:'aEWM1', 2:'Gf', 3:'aS', 4:'MZ',
                
 # ID:PID dictionary for SLHA inputs that are particle masses
 input_to_PID = {4:23, 5:5, 6:6, 7:15, 25:25, 9:24}
-PID_to_input = {v:k for k,v in input_to_PID.items()}
+PID_to_input = {v:k for k,v in list(input_to_PID.items())}
 
 # PID:value dictionary for default particle masses when undefined
 default_masses = {1:0.0048, 2:0.0023, 3:0.095, 4:1.42, 5:4.7, 6:173., 
@@ -47,7 +47,7 @@ lam, A, rho, eta = 0.22535, 0.811, 0.131, 0.345
 s12, s23 = lam, A*lam**2
 s13cd, s13sd = A*lam**3*rho, A*lam**3*eta
 s13 = sqrt(s13sd**2+s13cd**2)
-c12, c23, c13 = map(lambda x: sqrt(1.-x**2), (s12, s23, s13 ))
+c12, c23, c13 = [sqrt(1.-x**2) for x in (s12, s23, s13 )]
 # real and imaginary parts
 VCKM = {1:{1:c12*c13,                2:s12*c13,                3:s13cd  },
         2:{1:-s12*c23-c12*s23*s13cd, 2:c12*c23-s12*s23*s13cd,  3:s23*c13},

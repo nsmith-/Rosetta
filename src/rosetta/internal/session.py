@@ -1,6 +1,6 @@
 import sys
-import settings
-from StringIO import StringIO
+from . import settings
+from io import StringIO
 import textwrap
 import re
 from ..import __version__, __author__, __url__, __date__
@@ -49,8 +49,8 @@ def fmt(istr, lim):
 def stdout(msg, log=False, width=80):
     '''Display a message.'''
     wrapped = fmt(msg, width)
-    print >> output, wrapped
-    print wrapped
+    print(wrapped, file=output)
+    print(wrapped)
     if wrapped != '': __last = wrapped
         
 def log(msg, width=80):
@@ -59,7 +59,7 @@ def log(msg, width=80):
     if not settings.silent: 
         stdout(msg, width=width)
     else:
-        print >> suppressed, msg
+        print(msg, file=suppressed)
 
 def drawline(text='', ignore_silent=False):
     '''
@@ -106,7 +106,7 @@ def verbose(msg, width=80):
     if settings.verbose: 
         log(msg, width=width)
     else:
-        print >> suppressed, msg
+        print(msg, file=suppressed)
     
 def query(question, default="yes"):
     """
@@ -124,7 +124,7 @@ def query(question, default="yes"):
              "no":False, "n":False}
     
     if settings.silent: 
-        print >> suppressed, question+'    [{}]\n'.format(default)
+        print(question+'    [{}]\n'.format(default), file=suppressed)
         return valid[default]
     elif settings.force: 
         stdout(question+'    [{}]\n'.format(default))
@@ -141,7 +141,7 @@ def query(question, default="yes"):
 
     while True:
         log(question + prompt)
-        choice = raw_input().lower()
+        choice = input().lower()
         if default is not None and choice == '':
             return valid[default]
         elif choice in valid:

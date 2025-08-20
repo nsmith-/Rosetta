@@ -15,7 +15,7 @@ h_channels = {'bb':(5,-5),'mumu':(13,-13), 'tautau':(15,-15),
 # construct & name double Higgs decay channels
 hh_channels={}
 
-for ch1, ch2 in comb(h_channels.keys(), 2):
+for ch1, ch2 in comb(list(h_channels.keys()), 2):
     if ch2=='bb': ch1, ch2 = ch2, ch1
     
     id1, id2 = h_channels[ch1], h_channels[ch2]
@@ -28,7 +28,7 @@ for ch1, ch2 in comb(h_channels.keys(), 2):
     hh_channels[ch] = (h_channels[ch1], h_channels[ch2])
 
 # allowed values for command line options
-allowed_channels = ['all'] + hh_channels.keys()
+allowed_channels = ['all'] + list(hh_channels.keys())
 allowed_sqrts = (7,8,13,14,100)
 allowed_flav = ('general', 'diagonal', 'universal')
 
@@ -114,9 +114,9 @@ class DiHiggsInterface(RosettaInterface):
     }
 
     def __call__(self, args):
-        from dihiggs import get_xs_and_br, get_dihiggs_params        
-        from AnalyticalReweighter import AnalyticalReweighter
-        from AnalyticalReweighter import reweighter_from_histogram_and_file
+        from .dihiggs import get_xs_and_br, get_dihiggs_params        
+        from .AnalyticalReweighter import AnalyticalReweighter
+        from .AnalyticalReweighter import reweighter_from_histogram_and_file
         
         # get effective lagrangian parameters from param_card
         if args.param_card is not None: 
@@ -189,7 +189,7 @@ class DiHiggsInterface(RosettaInterface):
             session.stdout('  -------------------------------------------')
                     
             if 'all' in args.channel:
-                channels = hh_channels.keys()
+                channels = list(hh_channels.keys())
             else:
                 channels = args.channel
             

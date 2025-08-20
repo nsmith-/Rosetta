@@ -2,7 +2,7 @@ import os
 # from .. import config
 from ...internal.settings import config
 
-from errors import eHDECAYImportError, eHDECAYInterfaceError
+from .errors import eHDECAYImportError, eHDECAYInterfaceError
 
 # eHDECAY executable
 try:
@@ -18,4 +18,4 @@ if not os.path.exists(executable):
             '"eHDECAY_dir" in Rosetta/config.txt').format(executable))
     raise eHDECAYImportError(err)
 
-from interface import eHDECAYInterface
+from .interface import eHDECAYInterface

@@ -4,7 +4,7 @@ import inspect
 
 from ..bases import __all__ as basisnames
 from ..bases import *
-from errors import TranslationPathError, BasesError, RelationshipsError
+from .errors import TranslationPathError, BasesError, RelationshipsError
 ################################################################################
 __doc__ = '''
 Rosetta's machinery for generating the translation paths available for the set 
@@ -27,7 +27,7 @@ def djik(graph, source):
     nodes = []
     dist, prev = {}, {}
             
-    for v in graph.keys():
+    for v in list(graph.keys()):
         nodes.append(v)  # Collect all nodes on graph
         dist[v] = float('inf') # Set all distances to infinity
         prev[v] = None # Previous node in shortest path from source
@@ -37,14 +37,14 @@ def djik(graph, source):
     
     while nodes:
         # sort nodes by distance to source
-        avail = [(k,v) for k,v in dist.items() if k in nodes]
+        avail = [(k,v) for k,v in list(dist.items()) if k in nodes]
         
         # find closest node to source and remove it from nodes
         u = sorted(avail, key=itemgetter(1))[0][0]
         nodes.remove(u)
         
         # iterate over neighbours of u
-        for v in graph[u].keys():
+        for v in list(graph[u].keys()):
             nsteps = dist[u] + 1
             if nsteps < dist[v]:
                 dist[v] = nsteps
@@ -53,17 +53,17 @@ def djik(graph, source):
     return prev
 
 # Collect basis classes in base directory of Rosetta according to their name
-modules = {b:v for b,v in globals().iteritems() if b in basisnames}
+modules = {b:v for b,v in globals().items() if b in basisnames}
 bases = {}
-for bname, module in modules.iteritems():
+for bname, module in modules.items():
     try:
         bclass = module.__dict__[bname]
         if not inspect.isclass(bclass):
             raise KeyError
         bases[bclass.name] = bclass
     except KeyError:
-        print ('Warning: Rosetta did not find a class named ' +
-               '{0} in {0}.py. File ignored.'.format(bname) )
+        print(('Warning: Rosetta did not find a class named ' +
+               '{0} in {0}.py. File ignored.'.format(bname) ))
 
 if not bases: raise BasesError('No valid basis implementations found.')
 # Build dictionary of all basis classes and their implemented translation 
@@ -75,16 +75,16 @@ if not bases: raise BasesError('No valid basis implementations found.')
 #     tmap = {f._target:f for f in functions if f._target in bases}
 #     translations[basis] = tmap
 
-translations = {b:{} for b in bases.keys()}
-for basis, bclass in bases.iteritems():
-    to_functions = [i for i in bclass.__dict__.values() 
+translations = {b:{} for b in list(bases.keys())}
+for basis, bclass in bases.items():
+    to_functions = [i for i in list(bclass.__dict__.values()) 
                     if hasattr(i,'_target')]
                     
     for f in to_functions:
         if f._target in bases:
             translations[basis][f._target] = f
     
-    from_functions = [i for i in bclass.__dict__.values() 
+    from_functions = [i for i in list(bclass.__dict__.values()) 
                     if hasattr(i,'_source')]
                     
     for f in from_functions:

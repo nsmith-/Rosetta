@@ -61,7 +61,7 @@ class SILHBasis(basis.Basis):
         'SBxdB' : {'cname':'sdB' , 'kind':'general', 'domain':'complex'}
     }
 
-    independent = blocks.keys() + flavored.keys()
+    independent = list(blocks.keys()) + list(flavored.keys())
                   
     # two coefficients are zero by construction (set in calculate_dependent())
     dependent = ['CsHl1x1', 'CsHpl1x1']
@@ -151,7 +151,7 @@ class SILHBasis(basis.Basis):
                 ss = 0.
             return ss + delta(i,j)*(2.*S['s2W'] + S['sW'] + S['sHW'])
         
-        for i,j in S['SBxHq'].keys():
+        for i,j in list(S['SBxHq'].keys()):
             W['WBxH1l'][i,j] = cH1f('SBxHl', -1./2., i, j)
             W['WBxHe'][i,j] = cH1f('SBxHe', -1., i, j)
             W['WBxH1q'][i,j] = cH1f('SBxHq', 1./6., i, j)
@@ -160,13 +160,13 @@ class SILHBasis(basis.Basis):
             W['WBxH3l'][i,j] = cH3f('SBxHpl', i, j)
             W['WBxH3q'][i,j] = cH3f('SBxHpq', i, j)
             
-        for k in S['SBxHud'].keys():
+        for k in list(S['SBxHud'].keys()):
             W['WBxHud'][k] = S['SBxHud'][k]
 
         # Yukawa operators
         for f in ('u','d','e'): # fermion loop
             wmatrix, smatrix = 'WBx'+f+'H', 'SBx'+f
-            for i,j in S[smatrix].keys(): # flavor loop
+            for i,j in list(S[smatrix].keys()): # flavor loop
             
                 mi, mj = self.mass[PID[f][i]], self.mass[PID[f][j]]
                 
@@ -177,7 +177,7 @@ class SILHBasis(basis.Basis):
         # Dipole operators
         for f in ('u','d','e'):
             eta = 1 if f=='u' else -1
-            for i,j in S['SBx'+f+'W'].keys():
+            for i,j in list(S['SBx'+f+'W'].keys()):
                 
                 mi, mj = self.mass[PID[f][i]], self.mass[PID[f][j]]
                 
@@ -267,7 +267,7 @@ class SILHBasis(basis.Basis):
             return  delta(i,j)*( T3*T3coeff - Q*Qcoeff )
         
         # W/Z chiral coupling deviations
-        for i,j in S['SBxHpl'].keys():
+        for i,j in list(S['SBxHpl'].keys()):
 
             M[XB+'xdGLze'][i,j] = (-S['SBxHpl'][i,j]/2. - S['SBxHl'][i,j]/2. 
                                   + f(-1./2.,-1.,i,j) )
@@ -290,7 +290,7 @@ class SILHBasis(basis.Basis):
             M[XB+'xdGLwl'][i,j] = (S['SBxHpl'][i,j] + f(1./2.,0.,i,j) 
                                 - f(-1./2.,-1.,i,j))
 
-        for k,v in S['SBxHud'].iteritems():
+        for k,v in S['SBxHud'].items():
             M[XB+'xdGRwq'][k] = -v/2.
         
         
@@ -301,7 +301,7 @@ class SILHBasis(basis.Basis):
             
             glu, pho, zed = XB+'xdg'+f,  XB+'xda'+f, XB+'xdz'+f
             
-            for i,j in M[zed].keys():
+            for i,j in list(M[zed].keys()):
                 if f in ('u','d'):
                     M[glu][i,j] = -16./gw2*(S['SBx'+f+'G'][i,j])
 
@@ -339,7 +339,7 @@ class SILHBasis(basis.Basis):
         # Yukawa type interaction
         for f in ('u','d','e'):
             matrix = 'SBx' + f
-            for i,j in S['SBx'+f].keys(): 
+            for i,j in list(S['SBx'+f].keys()): 
                 diag = delta(i,j)*(S['sH'] + S['SBxHpl'][2,2].real)/2.
 
                 s_Re, s_Im = S[matrix][i,j].real, S[matrix][i,j].imag

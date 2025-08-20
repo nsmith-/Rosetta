@@ -28,13 +28,13 @@ class CaseInsensitiveDict(MutableMapping):
         del self._data[key.lower()]
 
     def __iter__(self):
-        return (casedkey for casedkey, mappedvalue in self._data.values())
+        return (casedkey for casedkey, mappedvalue in list(self._data.values()))
 
     def __len__(self):
         return len(self._data)
     
     def __repr__(self):
-        return repr([(k,v) for (k,v) in self._data.values()])
+        return repr([(k,v) for (k,v) in list(self._data.values())])
 
 class CaseInsensitiveOrderedDict(MutableMapping):
     '''
@@ -56,13 +56,13 @@ class CaseInsensitiveOrderedDict(MutableMapping):
         del self._data[key.lower()]
 
     def __iter__(self):
-        return (casedkey for casedkey, mappedvalue in self._data.values())
+        return (casedkey for casedkey, mappedvalue in list(self._data.values()))
 
     def __len__(self):
         return len(self._data)
     
     def __repr__(self):
-        return repr([(k,v) for (k,v) in self._data.values()])
+        return repr([(k,v) for (k,v) in list(self._data.values())])
     
 class Block(MutableMapping):
     '''    
@@ -173,7 +173,7 @@ class Matrix(Block):
 
     def __str__(self):
         content = []
-        sortitems = sorted(self.items(), key=itemgetter(0,0))
+        sortitems = sorted(list(self.items()), key=itemgetter(0,0))
         for k,v in sortitems:
             try:
                 v = float(v)
@@ -205,7 +205,7 @@ class Matrix(Block):
         for i,s in enumerate(isets):
             smin, smax = min(s), max(s)
             
-            if not s == range(smin,smax+1):
+            if not s == list(range(smin,smax+1)):
                 strs = [str(x) for x in s]
                 err = ('subdimension {} of array '.format(i) +
                        '{}, ({}), is not complete range.'.format(repr(self),
@@ -216,7 +216,7 @@ class Matrix(Block):
         
     def array(self):
         array = []
-        for k,v in self.iteritems():
+        for k,v in self.items():
             if isinstance(v,Matrix):
                 array.append(v.array())
             else:
@@ -261,7 +261,7 @@ class NamedBlock(Block):
             self._names = data._names
             try:
                 self._numbers = CaseInsensitiveOrderedDict({v:k for k,v 
-                                                  in self._names.iteritems()})
+                                                  in self._names.items()})
             except AttributeError:
                 raise ValueError('"names" keyword argument must be a'
                                  'dictionary or support iteritems() method.')
@@ -311,7 +311,7 @@ class NamedBlock(Block):
                                                               len(self._names)))
     def __str__(self):
         content = []
-        sortitems = sorted(self.items(), key=itemgetter(0))
+        sortitems = sorted(list(self.items()), key=itemgetter(0))
         for k,v in sortitems:
             try:
                 strval = ('{{{}}}'.format(self.fmt)).format(float(v))
@@ -363,7 +363,7 @@ class NamedBlock(Block):
             
     def namedict(self):
         '''Return python dict of name:key pairs.'''
-        return {self._names[k]:v for k,v in self.iteritems() 
+        return {self._names[k]:v for k,v in self.items() 
                                  if k in self._names }
 
 class NamedMatrix(Matrix, NamedBlock):
@@ -381,7 +381,7 @@ class NamedMatrix(Matrix, NamedBlock):
     def __str__(self):
         
         content = []
-        sortitems = sorted(self.items(), key=itemgetter(0,0))
+        sortitems = sorted(list(self.items()), key=itemgetter(0,0))
         for k,v in sortitems:
             try:
                 v = float(v)
@@ -430,7 +430,7 @@ class CBlock(Block):
         real and imaginary parts
         '''
         self._re, self._im = real, imag
-        for k, re in real.iteritems():
+        for k, re in real.items():
             try:
                 im = imag[k]
                 entry = complex(re,im)
@@ -474,7 +474,7 @@ class CNamedBlock(CBlock, NamedBlock):
         real and imaginary parts
         '''
         self._re, self._im = real, imag
-        for k, re in real.iteritems():
+        for k, re in real.items():
             try:
                 im = imag[k]
                 entry = complex(re,im)
@@ -490,7 +490,7 @@ class CNamedBlock(CBlock, NamedBlock):
                 
             self.new_entry(k, entry, name=cname)
             
-        for k, im in imag.iteritems():
+        for k, im in imag.items():
             if k not in real:
                 try:
                     cname = imag._names[k]
@@ -665,7 +665,7 @@ class Decay(MutableMapping):
         below = '#    BR{}    NDA       ID1       ID2...\n'.format(' '*self._decimal)
         if len(self)==0: below=''
         content = []
-        for k,v in self.iteritems():
+        for k,v in self.items():
             nparts = len(k)
             idfmt = nparts*'{: <10}'
             line = ('{{{}}}    {{: <10}}{}'.format(self._fmt,idfmt)).format
@@ -712,7 +712,7 @@ class Card(object):
         
         if self.has_matrix(key): return self.matrices
         
-        for block in self.matrices.values():
+        for block in list(self.matrices.values()):
             if key in block: return block
             try:
                 if key in block._re:
@@ -722,7 +722,7 @@ class Card(object):
             except AttributeError:
                 pass
             
-        for block in self.blocks.values():
+        for block in list(self.blocks.values()):
             if key in block: return block
         
         return None
@@ -755,10 +755,10 @@ class Card(object):
         self.matrices = CaseInsensitiveOrderedDict()
         self.name = name if name is not None else ''
         if blocks is not None:
-            for bname, block in blocks.iteritems():
+            for bname, block in blocks.items():
                 self.blocks[bname] = NamedBlock(name=bname, data=block)  
         if decays is not None:
-            for PID, decay in decays.iteritems():
+            for PID, decay in decays.items():
                 self.decays[PID]= Decay(PID,decay.total, data=decay)
             
     def __repr__(self):
@@ -882,7 +882,7 @@ class Card(object):
             
             blockorder = [x.lower() for x in blockorder]
             
-            allblocks = self.blocks.keys() + self.matrices.keys()
+            allblocks = list(self.blocks.keys()) + list(self.matrices.keys())
             
             other_blocks = [b for b in allblocks if b.lower() not in blockorder]
             
@@ -898,7 +898,7 @@ class Card(object):
                 elif self.has_matrix(block):
                     out.write(str(self.matrices[block]))
                                 
-            for decay in self.decays.values():
+            for decay in list(self.decays.values()):
                 out.write(str(decay))
             out.write(postamble)
             
@@ -909,7 +909,7 @@ class Card(object):
         '''
         
         cplx = []
-        for imkey in self.blocks.keys():
+        for imkey in list(self.blocks.keys()):
             if imkey.lower().startswith('im'):
                 rekey = imkey[2:]
                 if rekey in self.blocks:
@@ -929,7 +929,7 @@ class Card(object):
             self.blocks[rekey] = cblk
         
         cplx = []
-        for imkey in self.matrices.keys():
+        for imkey in list(self.matrices.keys()):
             if imkey.lower().startswith('im'):
                 rekey = imkey[2:]
                 if rekey in self.matrices:
@@ -952,10 +952,10 @@ class Card(object):
 
 
 def sortblocks(card, ignore = []):
-    normal_blocks = sorted([k for k in card.blocks.keys() 
+    normal_blocks = sorted([k for k in list(card.blocks.keys()) 
                             if k.lower() not in ignore],
                             key=str.lower)
-    flav_blocks = sorted([k for k in card.matrices.keys() 
+    flav_blocks = sorted([k for k in list(card.matrices.keys()) 
                           if k.lower() not in ignore],
                           key=str.lower)
     flav_cplx = []
@@ -1000,7 +1000,7 @@ def read(card, set_cplx=True):
             counter+=1 # keep track of line number
             stop=False
             try: ll=(last_line.strip())
-            except NameError: ll = (lines.next()).strip()
+            except NameError: ll = (next(lines)).strip()
         
             if not ll: continue
 
@@ -1047,18 +1047,18 @@ def read(card, set_cplx=True):
                                     datum)
                     if not info:
                         # print datum
-                        print ('Ignored datum in block '+
+                        print(('Ignored datum in block '+
                                 '{},'.format(theblock.name) +
-                                ' (line {} of {})'.format(counter, card))
+                                ' (line {} of {})'.format(counter, card)))
                         continue
                     
                     key, value, tail = info.group(1), info.group(2), info.group(3).strip()
                     
                     if tail and not(tail.startswith('#')):
                         # print datum
-                        print ('Ignored datum with inconsistent formatting in block '+
+                        print(('Ignored datum with inconsistent formatting in block '+
                                 '{},'.format(theblock.name) +
-                                ' (line {} of {})'.format(counter, card))
+                                ' (line {} of {})'.format(counter, card)))
                         continue
 
                     try:
@@ -1102,7 +1102,7 @@ def read(card, set_cplx=True):
                 except AttributeError:
                     err = ('Invalid decay format encountered ' + 
                           'in line {} of {}.'.format(counter, card) )
-                    print '"'+ll+'"'
+                    print('"'+ll+'"')
                     raise SLHAReadError(err)
                 
                 comment = get_comment(decay_details)
@@ -1120,10 +1120,10 @@ def read(card, set_cplx=True):
 
                     info = re.match(r'\s*(\S+)\s+(\d+)\s+(.+)',datum)
                     if not info:
-                        print datum
-                        print ('Ignored above datum in decay '+
+                        print(datum)
+                        print(('Ignored above datum in decay '+
                                 '{},'.format(thedecay.PID) +
-                                ' (line {} of {})'.format(counter, card))
+                                ' (line {} of {})'.format(counter, card)))
                         continue
                         
                     BR, nout = info.group(1), info.group(2)
@@ -1134,10 +1134,10 @@ def read(card, set_cplx=True):
                     if len(PIDs)!=int(nout):
                         print ("Number of external particles in column 2 doesn't "
                                "match number of subsequent columns:")
-                        print datum
-                        print ('Ignored above datum in decay '+
+                        print(datum)
+                        print(('Ignored above datum in decay '+
                                 '{},'.format(thedecay.PID) +
-                                ' (line {} of {})'.format(counter, card))
+                                ' (line {} of {})'.format(counter, card)))
                         continue
 
                     comment = get_comment(datum)
@@ -1175,7 +1175,7 @@ def read_until(lines, here, *args):
     stopiter = False
     while not any([line.strip().lower().startswith(x) for x in end_strings]):
         try:
-            line = lines.next()
+            line = next(lines)
             lines_read.append(line.strip('\n'))
         except StopIteration:
             stopiter=True

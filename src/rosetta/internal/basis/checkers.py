@@ -87,7 +87,7 @@ def sminputs(basis, required_inputs, message='Rosetta'):
                 session.exit()
         else:
             if basis.mass:
-                for k,v in [(i,j) for i,j in basis.mass.iteritems() 
+                for k,v in [(i,j) for i,j in basis.mass.items() 
                             if i in (23,25)]:
                     i = PID_to_input[k]
                     if i in basis.inputs:
@@ -185,7 +185,7 @@ def masses(basis, required_masses, message='Rosetta'):
                 session.exit()
         else:
             if basis.inputs:
-                for k,v in [(i,j) for i,j in basis.inputs.iteritems() 
+                for k,v in [(i,j) for i,j in basis.inputs.items() 
                             if i in (4,25)]:
                     i = input_to_PID[k]
                     if i in basis.mass:
@@ -210,7 +210,7 @@ def masses(basis, required_masses, message='Rosetta'):
                               for k in missing_masses}
             if missing_masses: # Deal with unassigned fermion masses
                 repr_default = ['M{}={: .5e} GeV'.format(particle_names[k],v) 
-                                for k,v in missing_values.items()]
+                                for k,v in list(missing_values.items())]
                 mass_list = ', '.join(['{} (M{})'.format(x,particle_names[x]) 
                                         for x in missing_masses])
 
@@ -254,7 +254,7 @@ def param_data(basis, do_unknown=True,
            assigned values. If not, the user is given the option to 
            continue with them set to 0.
     '''
-    for bname, defined in basis.blocks.iteritems():
+    for bname, defined in basis.blocks.items():
         # collect block info
         inputblock = basis.card.blocks.get(bname, None)
         if inputblock is None:
@@ -276,9 +276,9 @@ def param_data(basis, do_unknown=True,
         
         defined_eles = set(defined_block.keys())
         
-        independent = {i:v for i,v in defined_block.iteritems() 
+        independent = {i:v for i,v in defined_block.items() 
                        if v in basis.independent}
-        dependent = {i:v for i,v in defined_block.iteritems() 
+        dependent = {i:v for i,v in defined_block.items() 
                        if v in basis.dependent}
                        
         # check for unrecognised coefficient numbers              
@@ -291,7 +291,7 @@ def param_data(basis, do_unknown=True,
                    UnknownParameterWarning)
             session.log( '    The following will be ignored - '\
                   '{}'.format(', '.join(['{}:"{}"'.format(k,v) for k,v 
-                                         in unknown_names.iteritems()])))
+                                         in unknown_names.items()])))
             session.log('')                             
             for x in unknown: del inputblock[x]
                                          
@@ -299,7 +299,7 @@ def param_data(basis, do_unknown=True,
         mismatched = []
         unnamed = []
         
-        for index, name in independent.items():
+        for index, name in list(independent.items()):
             input_name = inputblock.get_name(index, None)
             if input_name is None: 
                 inputblock._names[index] = name
@@ -330,7 +330,7 @@ def param_data(basis, do_unknown=True,
                        DependentParameterWarning)
             session.log('    Coefficients: {}'.format(', '.join(
                                             ['{}:"{}"'.format(k,v) 
-                                            for k,v in dependent.items() 
+                                            for k,v in list(dependent.items()) 
                                             if k in defined_dependent]
                                             )))
             session.log('    These may be overwritten by an implementation of '\
@@ -351,7 +351,7 @@ def param_data(basis, do_unknown=True,
                   RequiredParameterWarning)
             session.log('    Undefined: {}'.format(', '.join(
                                             ['{}:"{}"'.format(k,v) 
-                                             for k,v in independent.items() 
+                                             for k,v in list(independent.items()) 
                                              if k in missing])))
             carry_on = session.query('Continue assuming unspecified '\
                                      'coefficients are Zero?')
@@ -385,7 +385,7 @@ def flavored_data(basis):
            continue with them set to 0.
     '''
 
-    for bname, defined in basis.fblocks.iteritems():
+    for bname, defined in basis.fblocks.items():
         # collect block info
         inputblock = basis.card.matrices.get(bname, None)
         if inputblock is None:
@@ -399,9 +399,9 @@ def flavored_data(basis):
                             i,v in enumerate(defined)}
         defined_eles = set(defined_block.keys())
         
-        independent = {k:v for k,v in defined_block.iteritems() 
+        independent = {k:v for k,v in defined_block.items() 
                        if v in basis.independent or bname in basis.independent}
-        dependent = {k:v for k,v in defined_block.iteritems() 
+        dependent = {k:v for k,v in defined_block.items() 
                        if v in basis.dependent}
         # check for unrecognised coefficient numbers              
         unknown = input_eles.difference(defined_eles)
@@ -410,7 +410,7 @@ def flavored_data(basis):
                              for i in unknown}
             
             ignored = ', '.join(['{}:"{}"'.format(k,v) for k,v 
-                                  in unknown_names.iteritems()])
+                                  in unknown_names.items()])
             
             msg = ('you have declared coefficients undefined in {}, '
                    '{}: {}.\n    The following will be ignored - '
@@ -425,7 +425,7 @@ def flavored_data(basis):
         mismatched = []
         unnamed = []
         
-        for index, name in independent.items():
+        for index, name in list(independent.items()):
             input_name = inputblock.get_name(index, None)
             if input_name is None: 
                 inputblock._names[index] = name
@@ -456,7 +456,7 @@ def flavored_data(basis):
                         DependentParameterWarning)
             session.log('    Coefficients: {}'.format(', '.join(
                                            ['{}:"{}"'.format(k,v) 
-                                            for k,v in dependent.items() 
+                                            for k,v in list(dependent.items()) 
                                             if k in defined_dependent]
                                             )))
             session.log('    These may be overwritten by an implementation of '\
@@ -478,7 +478,7 @@ def flavored_data(basis):
                   
             session.log('    Undefined: {}'.format(', '.join(
                                         ['{}:"{}"'.format(k,v) 
-                                         for k,v in independent.items() 
+                                         for k,v in list(independent.items()) 
                                          if k in missing])))
             carry_on = session.query('    Continue assuming unspecified '\
                                      'coefficients are Zero?')
@@ -498,7 +498,7 @@ def calculated_data(basis):
     coefficients have been calculated. If not, asks whether the user wants 
     to continue assuming they are zero.
     '''
-    missing_dependents = set(basis.dependent).difference(basis.par_dict.keys())
+    missing_dependents = set(basis.dependent).difference(list(basis.par_dict.keys()))
     if missing_dependents and basis.dependent:
         session.warnings.warn('Set of dependent coefficients calculated '\
                     'by {0}.calculate_dependent() does not match those '\
@@ -516,7 +516,7 @@ def calculated_data(basis):
                         'in {}.dependent.'.format(basis.__class__.__name__))
 
 def modified_inputs(basis):
-    for k,v in [(i,j) for i,j in basis.inputs.iteritems() 
+    for k,v in [(i,j) for i,j in basis.inputs.items() 
                 if i in (4,5,6,7,25)]:
         i = input_to_PID[k]
         if i in basis.mass:

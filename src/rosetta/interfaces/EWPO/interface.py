@@ -4,7 +4,7 @@ from ...internal.basis import checkers as check
 from ...internal.errors import TranslationError
 from ...internal import session
 from ..interface import RosettaInterface, allowed_flav
-from chisq import chisq_and_pvalue
+from .chisq import chisq_and_pvalue
 #
 
 class EWPOInterface(RosettaInterface):

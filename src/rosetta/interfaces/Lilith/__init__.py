@@ -3,7 +3,7 @@ import sys
 # from .. import config
 from ...internal.settings import config
 
-from errors import LilithImportError, LilithInterfaceError
+from .errors import LilithImportError, LilithInterfaceError
 ################################################################################
 # check for NumPy >= 1.6.1 and Scipy >= 0.9.0
 try:
@@ -29,12 +29,12 @@ except Exception as err:
     raise LilithImportError(err)
 # Lilith path
 try:
-    import lilith
+    from . import lilith
 except ImportError:
     try:
         Lilith_dir = config['Lilith_dir']
         sys.path.append(Lilith_dir)
-        import lilith
+        from . import lilith
     except KeyError:
         err = ('Could not find option "Lilith_dir" in Rosetta/config.txt')
         raise LilithImportError(err)
@@ -43,4 +43,4 @@ except ImportError:
                'Rosetta/config.txt')
         raise LilithImportError(err)
 ################################################################################
-from interface import LilithInterface
+from .interface import LilithInterface

@@ -20,6 +20,6 @@ def chisq(c):
 
 c = np.full(36,1e-3)
 x2 = chisq(c)
-print x2
+print(x2)
 thirtysix = chi2(36)
-print thirtysix.sf(x2)
+print(thirtysix.sf(x2))

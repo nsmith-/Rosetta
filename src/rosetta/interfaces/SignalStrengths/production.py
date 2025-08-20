@@ -1,8 +1,8 @@
-from __future__ import division
+
 from math import pi
-from decay import Hgg
+from .decay import Hgg
 from ...internal.basis import checkers as check
-from errors import SqrtsError
+from .errors import SqrtsError
 ################################################################################
 # TO DO: provide production function to do the same job as decay(..., ratios=False)
 # required info

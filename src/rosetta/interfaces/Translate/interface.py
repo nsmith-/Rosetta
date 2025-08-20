@@ -31,10 +31,10 @@ class TranslateInterface(RosettaInterface):
             'help':'Overwrite any pre-existing output file.'
         },
         ('--target',):{
-            'type':str, 'default':'bsmc', 'choices':implemented_bases.keys(),
+            'type':str, 'default':'bsmc', 'choices':list(implemented_bases.keys()),
             'metavar':'',
             'help':('Basis into which to translate. Allowed values are: '+
-                    ', '.join(implemented_bases.keys()) + ' (default = bsmc)')
+                    ', '.join(list(implemented_bases.keys())) + ' (default = bsmc)')
         },
         ('--flavor',):{
             'type':str, 'default':'general', 'choices':allowed_flav, 'metavar':'',
@@ -78,7 +78,7 @@ class TranslateInterface(RosettaInterface):
         preamble = ('###################################\n'
                   + '## DECAY INFORMATION\n'
                   + '###################################')
-        for decay in newbasis.card.decays.values():
+        for decay in list(newbasis.card.decays.values()):
             decay.preamble = preamble
             break
         

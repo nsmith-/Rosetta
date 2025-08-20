@@ -1,4 +1,4 @@
-from errors import SignalStrengthsImportError, SignalStrengthsInterfaceError
+from .errors import SignalStrengthsImportError, SignalStrengthsInterfaceError
 
 try:
     from ..eHDECAY.eHDECAY import SM_BR
@@ -7,4 +7,4 @@ except ImportError as e:
     use_eHDECAY = False
     
     
-from interface import SignalStrengthsInterface
+from .interface import SignalStrengthsInterface

@@ -1,4 +1,4 @@
-import SLHA
+from . import SLHA
 from itertools import product
 from collections import OrderedDict
 import re
@@ -49,13 +49,13 @@ class TwoDMatrix(SLHA.NamedMatrix):
         self.fmt = matrix.fmt
         self.keytype = matrix.keytype
         self.cast = matrix.cast
-        self._data = OrderedDict(matrix._data.items())
+        self._data = OrderedDict(list(matrix._data.items()))
         self.preamble = matrix.preamble
-        self._names = {k:v for k,v in matrix._names.items()}
+        self._names = {k:v for k,v in list(matrix._names.items())}
         self._numbers = SLHA.CaseInsensitiveDict({k:v for k,v in 
-                                                  matrix._numbers.items()})
+                                                  list(matrix._numbers.items())})
                                                   
-        for k,v in self.items()[::-1]:
+        for k,v in list(self.items())[::-1]:
             self[k] = v
 
     def __setitem__(self, key, value):
@@ -103,7 +103,7 @@ class TwoDMatrix(SLHA.NamedMatrix):
     def T(self):
         new = self.__class__(self)
         # transposed data
-        newdata = OrderedDict([((j,i),v) for (i,j),v in new._data.items()])
+        newdata = OrderedDict([((j,i),v) for (i,j),v in list(new._data.items())])
         new._data = newdata
         return new
 
@@ -166,9 +166,9 @@ class CTwoDMatrix(TwoDMatrix, SLHA.CNamedMatrix):
     def T(self):
         new = self.__class__(self)
         # transposed data
-        newdata = OrderedDict([((j,i),v) for (i,j),v in new._data.items()])
-        re_data = OrderedDict([((j,i),v) for (i,j),v in new._re._data.items()])
-        im_data = OrderedDict([((j,i),v) for (i,j),v in new._im._data.items()])
+        newdata = OrderedDict([((j,i),v) for (i,j),v in list(new._data.items())])
+        re_data = OrderedDict([((j,i),v) for (i,j),v in list(new._re._data.items())])
+        im_data = OrderedDict([((j,i),v) for (i,j),v in list(new._im._data.items())])
         new._data = newdata
         new._re._data = re_data
         new._im._data = im_data
@@ -178,9 +178,9 @@ class CTwoDMatrix(TwoDMatrix, SLHA.CNamedMatrix):
         new = self.__class__(self)
         # transposed data
         newdata = OrderedDict([((j,i),v.conjugate()) 
-                               for (i,j),v in new._data.items()])
-        re_data = OrderedDict([((j,i),v) for (i,j),v in new._re._data.items()])
-        im_data = OrderedDict([((j,i),-v) for (i,j),v in new._im._data.items()])
+                               for (i,j),v in list(new._data.items())])
+        re_data = OrderedDict([((j,i),v) for (i,j),v in list(new._re._data.items())])
+        im_data = OrderedDict([((j,i),-v) for (i,j),v in list(new._im._data.items())])
         new._data = newdata
         new._re._data = re_data
         new._im._data = im_data
@@ -284,7 +284,7 @@ def matrix_mult(A, B, assign=None):
                                            
     dim = dimA[-1]
     
-    for k in product(*[range(1,x+1) for x in dimC]):
+    for k in product(*[list(range(1,x+1)) for x in dimC]):
         C[k] = sum( [ A[k[:-1]+(x,)]*B[(x,)+k[1:]] 
                       for x in range(1,dim+1) ] )
         
@@ -326,7 +326,7 @@ def matrix_add(A, B, assign=None):
                                            
     dim = dimA[-1]
     
-    for k in product(*[range(1,x+1) for x in dimC]):
+    for k in product(*[list(range(1,x+1)) for x in dimC]):
         C[k] = A[k] + B[k]
         
     return C
@@ -366,7 +366,7 @@ def matrix_sub(A, B, assign=None):
                                            
     dim = dimA[-1]
     
-    for k in product(*[range(1,x+1) for x in dimC]):
+    for k in product(*[list(range(1,x+1)) for x in dimC]):
         C[k] = A[k] - B[k]
         
     return C
@@ -388,7 +388,7 @@ def matrix_eq(A, B):
                "match that of array B")
         raise IndexError(err)
                                                
-    for k in product(*[range(1,x+1) for x in dimA]):
+    for k in product(*[list(range(1,x+1)) for x in dimA]):
         B[k] = A[k]
 
 if __name__=='__main__':

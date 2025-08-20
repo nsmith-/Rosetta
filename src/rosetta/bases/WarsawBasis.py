@@ -62,7 +62,7 @@ class WarsawBasis(basis.Basis):
         'WBxdB' : {'cname':'cdB' , 'kind':'general', 'domain':'complex'}   
     }
     
-    independent = [c for c in blocks.keys()] + [c for c in flavored.keys()]
+    independent = [c for c in list(blocks.keys())] + [c for c in list(flavored.keys())]
     
     # Higgs, W & fermion  masses
     required_masses = {25, 24, 1, 2, 3, 4, 5, 6, 11, 13 ,15} 
@@ -143,7 +143,7 @@ class WarsawBasis(basis.Basis):
         def spHf(wc, i, j):
                 return W[wc][i,j] - delta(i,j)*W['WBxH3l'][1,1,].real
 
-        for i,j in W['WBxH1l'].keys():
+        for i,j in list(W['WBxH1l'].keys()):
             # avoid dependent coefficients that are zero in SILH
             if (i,j) != (1,1):
                 S['SBxHl'][i,j] = sHf('WBxH1l', -1./2., i, j)
@@ -154,13 +154,13 @@ class WarsawBasis(basis.Basis):
             S['SBxHd'][i,j] = sHf('WBxHd', -1./3., i, j)
             S['SBxHpq'][i,j] = spHf('WBxH3q', i, j)
             
-        for k in W['WBxHud'].keys():
+        for k in list(W['WBxHud'].keys()):
             S['SBxHud'][k] = W['WBxHud'][k]
 
         # Yukawa operators
         for f in ('u','d','e'): # loop over fermions
             wmatrix, smatrix = 'WBx'+f+'H', 'SBx'+f
-            for i,j in W[wmatrix].keys(): # flavor loop
+            for i,j in list(W[wmatrix].keys()): # flavor loop
                 mi, mj = self.mass[PID[f][i]], self.mass[PID[f][j]]
                 
                 diag = delta(i,j)*(W['cll1221']/2. - W['WBxH3l'][1,1,].real*2.)
@@ -170,7 +170,7 @@ class WarsawBasis(basis.Basis):
         # Dipole operators
         for f in ('u','d','e'):
             eta = 1 if f=='u' else -1
-            for i,j in S['SBx'+f+'W'].keys():
+            for i,j in list(S['SBx'+f+'W'].keys()):
                 
                 mi, mj = self.mass[PID[f][i]], self.mass[PID[f][j]]
                 
@@ -246,7 +246,7 @@ class WarsawBasis(basis.Basis):
                 return 0.
 
         # W/Z chiral coupling deviations
-        for i,j in W['WBxH3l'].keys():
+        for i,j in list(W['WBxH3l'].keys()):
             M[XB+'xdGLwl'][i,j] = (W['WBxH3l'][i,j] + f(1./2.,0.,i,j) 
                                   - f(-1./2.,-1.,i,j))
             
@@ -269,7 +269,7 @@ class WarsawBasis(basis.Basis):
 
             M[XB+'xdGRzd'][i,j] = (- 1./2.*W['WBxHd'][i,j] + f(0.,-1./3.,i,j))
 
-        for k,cHud_ij in W['WBxHud'].iteritems():
+        for k,cHud_ij in W['WBxHud'].items():
             M[XB+'xdGRwq'][k] = -cHud_ij/2.
         
         
@@ -279,7 +279,7 @@ class WarsawBasis(basis.Basis):
             
             glu, pho, zed = XB+'xdg'+f,  XB+'xda'+f, XB+'xdz'+f
             
-            for i,j in M[zed].keys():
+            for i,j in list(M[zed].keys()):
                 mi, mj = self.mass[PID[f][i]], self.mass[PID[f][j]]
                 
                 MFVnorm = 2.*sqrt(2.)*vev/sqrt(mi*mj)
@@ -325,7 +325,7 @@ class WarsawBasis(basis.Basis):
 
         for f in ('u','d','e'):
             matrix = 'WBx' + f +'H'
-            for i,j in W[matrix].keys(): 
+            for i,j in list(W[matrix].keys()): 
                 
                 diag = delta(i,j)*( W['cll1221']/4. + W['cHbx'] - W['cHD']/4.
                         - W['WBxH3l'][1,1].real/2. - W['WBxH3l'][2,2].real/2. )

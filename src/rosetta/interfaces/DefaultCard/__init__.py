@@ -1,1 +1,1 @@
-from interface import DefaultCardInterface
+from .interface import DefaultCardInterface

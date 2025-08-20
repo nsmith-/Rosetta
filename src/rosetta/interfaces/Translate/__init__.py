@@ -1,1 +1,1 @@
-from interface import TranslateInterface
+from .interface import TranslateInterface

@@ -48,7 +48,7 @@ class TemplateBasis(basis.Basis):
         p = self
         p['d'] = p['a']+ p['b']*p['c']
         # element-wise asssignment for matrix BB: BB[i,j] = -A[i,j]/4.
-        for k, v in p['AA'].iteritems():
+        for k, v in p['AA'].items():
             p['BB'][k] = -v/4.
         # matrix multiplication function assigning CC -> AA.BB
         matrix_mult(p['AA'], p['BB'], p['CC'])

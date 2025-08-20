@@ -201,7 +201,7 @@ class HiggsBasis(basis.Basis):
                 
             adip, zdip = 'HBxda'+f, 'HBxdz'+f
 
-            for i,j in A[wdip].keys():
+            for i,j in list(A[wdip].keys()):
                 A[wdip][i,j] = eta*( A[zdip][i,j] + s2w*A[adip][i,j] )
 
         # list of all z/w vertex correction blocks
@@ -268,7 +268,7 @@ class HiggsBasis(basis.Basis):
             yuk = 'HBxdY' + f
             sin = 'HBxS' + f
             yuk2 = 'HBxY2' + f 
-            for i,j in A[yuk].keys():
+            for i,j in list(A[yuk].keys()):
                 Yij = A[yuk][i,j]
                 sinij = A[sin][i,j]
                 cosij = sqrt(1. - sinij**2)
@@ -286,7 +286,7 @@ class HiggsBasis(basis.Basis):
         H = self
         B = instance
         dipoles = ['Cdau','Cdzu']
-        for k, v in self.iteritems():
+        for k, v in self.items():
             
             is_dipole = re.match(r'Cdh{0,1}[a,z,g][u,d,e]\dx\d', k)
             
@@ -294,7 +294,7 @@ class HiggsBasis(basis.Basis):
                 try:
                     B[k] = v
                 except KeyError:
-                    print '    ' + k + ' not found in BSMC definition.'
+                    print('    ' + k + ' not found in BSMC definition.')
         
         # splitting dipole coefficients
         ii = complex(0.,1.)
@@ -304,7 +304,7 @@ class HiggsBasis(basis.Basis):
             pho, tpho = 'BCxda'+f, 'BCxtda'+f
             zed, tzed = 'BCxdz'+f, 'BCxtdz'+f
 
-            for i,j in B[zed].keys():
+            for i,j in list(B[zed].keys()):
                 if f in ('u','d'):
                     Gij, Gji = H['HBxdg'+f][i,j], H['HBxdg'+f][j,i]
                     B[glu][i,j] = -(Gij + Gji.conjugate())
@@ -389,7 +389,7 @@ class HiggsBasis(basis.Basis):
         
         # Yukawa
         for f in ('u','d','e'):
-            for i,j in H['HBxdY'+f].keys(): 
+            for i,j in list(H['HBxdY'+f].keys()): 
                 
                 mi, mj = self.mass[PID[f][i]], self.mass[PID[f][j]]
                 
@@ -405,7 +405,7 @@ class HiggsBasis(basis.Basis):
         
         RdGLzd = matrix_mult(matrix_mult(H.ckm, H['HBxdGLzd']),H.ckm.dag()) 
         
-        for i,j in H['HBxdGLzu'].keys():
+        for i,j in list(H['HBxdGLzu'].keys()):
             
             facp = delta(i,j)*C1
             fac = delta(i,j)*C2
@@ -424,13 +424,13 @@ class HiggsBasis(basis.Basis):
             
             W['WBxHd'][i,j] = - 2.*H['HBxdGRzd'][i,j] + 1./3.*fac
 
-        for k,v in H['HBxdGRwq'].iteritems():
+        for k,v in H['HBxdGRwq'].items():
             W['WBxHud'][k] = -2.*v
         
         # Dipole operators
         for f in ('u','d','e'):
             eta = 1 if f=='u' else -1
-            for i,j in W['WBx'+f+'W'].keys():
+            for i,j in list(W['WBx'+f+'W'].keys()):
                 
                 mi, mj = self.mass[PID[f][i]], self.mass[PID[f][j]]
                 
@@ -530,7 +530,7 @@ class HiggsBasis(basis.Basis):
 
         # Yukawa interactions
         for f in ('u','d','e'):
-            for i,j in H['HBxdY'+f].keys(): 
+            for i,j in list(H['HBxdY'+f].keys()): 
                 diag = delta(i,j)*( H['dCz'] - H['HBxdGLwl'][1,1].real 
                                   + H['HBxdGLwl'][2,2].real )     
                                              
@@ -545,7 +545,7 @@ class HiggsBasis(basis.Basis):
 
         # Gauge boson
         RdGLzd = matrix_mult(matrix_mult(H.ckm, H['HBxdGLzd']),H.ckm.dag()) 
-        for i, j in H['HBxdGLzu'].keys():
+        for i, j in list(H['HBxdGLzu'].keys()):
             
             diagp = delta(i,j)*H['HBxdGLwl'][1,1]
             
@@ -565,7 +565,7 @@ class HiggsBasis(basis.Basis):
 
             S['SBxHd'][i,j] = - 2.*H['HBxdGRzd'][i,j] + 2./3.*diag
             
-        for k, v in H['HBxdGRwq'].iteritems():
+        for k, v in H['HBxdGRwq'].items():
             S['SBxHud'][k] = -2.*v              
         
         
@@ -573,7 +573,7 @@ class HiggsBasis(basis.Basis):
         ii = complex(0.,1.)
         for f in ('u','d','e'):
             eta = 1 if f=='u' else -1
-            for i,j in S['SBx'+f+'W'].keys():
+            for i,j in list(S['SBx'+f+'W'].keys()):
                 # gluon
                 if f in ('u','d'):
                     S['SBx'+f+'G'][i,j] = - H['HBxdg'+f][i,j]*gw2/16.
@@ -642,7 +642,7 @@ class HiggsBasis(basis.Basis):
         
         # Yukawa interactions
         for f in ('u','d','e'):
-            for i,j in H['HBxdY'+f].keys(): 
+            for i,j in list(H['HBxdY'+f].keys()): 
                
                 yuk = H['HBxdY'+f][i,j]
                 sin = H['HBxS'+f][i,j]

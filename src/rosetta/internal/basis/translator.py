@@ -2,7 +2,7 @@ from .. import session
 from .. import SLHA
 from ..errors import TranslationPathError
 from ..constants import input_names
-import checkers as check
+from . import checkers as check
 
 def translate(basis, target=None, cache=True, avoid_cache = False, 
                       minimal=False): 
@@ -80,7 +80,7 @@ def translate(basis, target=None, cache=True, avoid_cache = False,
         new = translate_function(current, instance)        
         
         # update new basis instance with non-EFT blocks, decays
-        all_coeffs = (current.blocks.keys() + current.flavored.keys())
+        all_coeffs = (list(current.blocks.keys()) + list(current.flavored.keys()))
         get_other_blocks(new, current,
                          ignore = all_coeffs+[current.inputs_blockname] )
                          # ignore = all_coeffs)
@@ -135,10 +135,10 @@ def get_other_blocks(basis, basis_in, ignore=[]):
     card = basis_in.card
     
     other_blocks, other_matrices = {}, {}
-    for k, v in card.blocks.iteritems():
+    for k, v in card.blocks.items():
         if k.lower() != 'basis' and k.lower() not in ignore:
             other_blocks[k]=v
-    for k, v in card.matrices.iteritems():
+    for k, v in card.matrices.items():
         if k.lower() != 'basis' and k.lower() not in ignore:
             other_matrices[k]=v
 
@@ -150,7 +150,7 @@ def get_other_blocks(basis, basis_in, ignore=[]):
         theblock = card.matrices[matrix]
         basis.card.add_block(theblock)
     
-    for decay in card.decays.values():
+    for decay in list(card.decays.values()):
         basis.card.add_decay(decay, preamble = decay.preamble)
     
     if card.has_block('mass'):
@@ -178,12 +178,12 @@ def gen_input_block(basis_in, basis_out):
     # said input parameter
     # input basis
     derived_inputs_in = {i._derived_input:i for i in 
-                      basis_in.__class__.__dict__.values() 
+                      list(basis_in.__class__.__dict__.values()) 
                       if hasattr(i,'_derived_input')}
                       
     # target basis
     derived_inputs_out = {i._derived_input:i for i in 
-                      basis_out.__class__.__dict__.values() 
+                      list(basis_out.__class__.__dict__.values()) 
                       if hasattr(i,'_derived_input')}
     
     for k in basis_out.required_inputs:
@@ -216,14 +216,14 @@ def expand_matrices(basis):
                 (2,1), (2,2), (2,3),
                 (3,1), (3,2), (3,3)]
                 
-    for matrix in basis.card.matrices.values():
+    for matrix in list(basis.card.matrices.values()):
         # list of missing elements in _data member of matrix instance
         missing_keys = [k for k in all_keys if k not in matrix._data]
         
         if missing_keys:
             # randomly select parameter name since they all should have 
             # the same structure: (R|I)NAMEixj
-            elename = matrix._names.values()[0]
+            elename = list(matrix._names.values())[0]
             cname = elename[1:-3] # matrix name
             pref = elename[0] 
             for k in missing_keys:

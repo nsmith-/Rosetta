@@ -39,7 +39,7 @@ class RosettaInterface(object):
         except KeyError:
             err = ('\n    Element 1 of block "BASIS", "{}", '.format(basis) +
                    'not recognised. Rosetta accepts one of: ' +
-                   '{}.'.format(', '.join(implemented_bases.keys())))
+                   '{}.'.format(', '.join(list(implemented_bases.keys()))))
             raise ReadParamCardError(err)
         
         session.log('\nBasis class used to read in param card:\n'+

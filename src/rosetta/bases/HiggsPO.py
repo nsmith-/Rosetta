@@ -27,7 +27,7 @@ class HiggsPO(basis.Basis):
     numbers = {'lb':11, 'lc':12,'ltau':13,'lmu':14}
     
     # All parameters independent
-    independent = [x for v in blocks.values() for x in v ]
+    independent = [x for v in list(blocks.values()) for x in v ]
 
     # MH, MZ, MW, Ms, Mc, Mb, Mt, Mtau
     required_masses = {25, 23, 24, 3, 4, 5, 6, 15} 

@@ -1,7 +1,7 @@
 from ..interface import RosettaInterface, allowed_flav
 from ...internal.basis import checkers as check
 from ...internal.errors import TranslationError
-from eHDECAY import create_SLHA_block
+from .eHDECAY import create_SLHA_block
 from ...internal import session
 
 #
@@ -51,7 +51,7 @@ class eHDECAYInterface(RosettaInterface):
         try:
             decayblock = create_SLHA_block(basis_instance, electroweak=args.EW)
         except TranslationError as e:
-            print e
+            print(e)
             print ('Translation to modified-SILH Basis '
                    'required for eHDECAY interface.')
             session.exit(1)
@@ -69,7 +69,7 @@ class eHDECAYInterface(RosettaInterface):
             preamble = ('###################################\n'
                       + '## DECAY INFORMATION\n'
                       + '###################################')
-            for decay in basis_instance.card.decays.values():
+            for decay in list(basis_instance.card.decays.values()):
                 decay.preamble = preamble
                 break
                 

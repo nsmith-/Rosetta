@@ -25,7 +25,7 @@ def set_subparsers(subparsers):
     # Put translate interface first
 
     trans_item = interfaces.pop('TranslateInterface')
-    interfaces_sorted = [('TranslateInterface', trans_item)]+interfaces.items()
+    interfaces_sorted = [('TranslateInterface', trans_item)]+list(interfaces.items())
 
     for name, intr in interfaces_sorted:
             
@@ -37,11 +37,11 @@ def set_subparsers(subparsers):
         if hasattr(intr, 'parser_args_order'):
             for args in intr.parser_args_order:
                 parsers[name].add_argument(*args, **intr.parser_args[args])
-            for args, kwargs in intr.parser_args.iteritems():
+            for args, kwargs in intr.parser_args.items():
                 if args not in intr.parser_args_order:
                     parsers[name].add_argument(*args, **kwargs)
         else:
-            for args, kwargs in intr.parser_args.iteritems():
+            for args, kwargs in intr.parser_args.items():
                 parsers[name].add_argument(*args, **kwargs)
     
         parsers[name].set_defaults(interface = intr)

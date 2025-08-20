@@ -18,9 +18,9 @@ class DefaultCardInterface(RosettaInterface):
     
     parser_args = {
         ('basis',):{
-            'metavar':'BASIS', 'type':str, 'choices':implemented_bases.keys(),
+            'metavar':'BASIS', 'type':str, 'choices':list(implemented_bases.keys()),
             'help':('Basis class for which to generate the parameter card. ' +
-            'Allowed values are: ' + ', '.join(implemented_bases.keys()) + 
+            'Allowed values are: ' + ', '.join(list(implemented_bases.keys())) + 
             ' (default = bsmc)')
         },
         ('-o','--output'):{

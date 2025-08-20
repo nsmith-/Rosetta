@@ -57,10 +57,10 @@ def create_SLHA_block(basis, electroweak=True):
         BRs = run(basis, electroweak=True)
         # BR2 = run(basis, interpolate=True)
     except eHDECAYInterfaceError:
-        print e
+        print(e)
         return
 
-    sum_BRs = sum([v for k,v in BRs.items() if k is not 'WTOT'])
+    sum_BRs = sum([v for k,v in list(BRs.items()) if k is not 'WTOT'])
 
     # sometimes eHDECAY gives a sum of BRs slightly greater than 1.
     # for now a hacky global rescaling is implemented to deal with this.
@@ -69,7 +69,7 @@ def create_SLHA_block(basis, electroweak=True):
             msg = ('Sum of branching fractions = '
                    '{} ; > 1 by more than 1%'.format(sum_BRs))
             session.warnings.warn(msg, eHDECAYBrGtOneWarning)
-        for channel, BR in BRs.iteritems():
+        for channel, BR in BRs.items():
             if channel!='WTOT':
                 BRs[channel] = BR/sum_BRs
 
@@ -83,7 +83,7 @@ def create_SLHA_block(basis, electroweak=True):
     hdecays = {}
 
     # sometimes eHDECAY gives negative branching fractions.
-    for channel, BR in BRs.iteritems():
+    for channel, BR in BRs.items():
 
         if BR < 0.:
             n1, n2 = particle_names[channel[0]], particle_names[channel[1]]
@@ -203,7 +203,7 @@ def SM_BR(basis=None, inputs={}, electroweak=True):
         idicts = {1:(sminputs, 'aEWM1'), 2:(sminputs, 'Gf'), 
                   3:(sminputs, 'aSMZ'), 23:(mass, 'MZ'), 
                   24:(mass, 'MW'), 25:(mass, 'MH')}
-        for k, (idict, name) in idicts.iteritems():
+        for k, (idict, name) in idicts.items():
             try:
                 idict[k]=inputs[name]
             except KeyError:
@@ -508,12 +508,12 @@ def interpolated(inpt, electroweak=True, SM_BRs=None):
     
     # rescale SM BRs
     SMwid, BRs['WTOT'] = BRs['WTOT'], 0.
-    for k,fact in rscl.iteritems():
+    for k,fact in rscl.items():
         PW = BRs[k]*SMwid*fact
         BRs[k] = PW
         BRs['WTOT'] += PW
     
-    for k,fact in rscl.iteritems():
+    for k,fact in rscl.items():
         BRs[k] /= BRs['WTOT']
 
     return BRs

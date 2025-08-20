@@ -5,7 +5,7 @@ import os
 from ..internal import session
 from ..internal.errors import RosettaImportError
 
-from errors import LoadInterfaceError
+from .errors import LoadInterfaceError
 
 _all_interfaces = OrderedDict()
 

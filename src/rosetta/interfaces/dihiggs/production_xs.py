@@ -1,4 +1,4 @@
-from errors import SqrtsError
+from .errors import SqrtsError
 
 # SM predictions for di-higgs production with various relative (%))
 # uncertainties at different pp collider energies
@@ -47,7 +47,7 @@ def xsfb(E, kl, kt, c2, cg, c2g, error=False):
     if not error:
         return SM['xs']*R_SM
     else:
-        return SM['xs']*R_SM, {k:v*R_SM for k,v in SM.iteritems() if k!='xs'}
+        return SM['xs']*R_SM, {k:v*R_SM for k,v in SM.items() if k!='xs'}
 
 # print "RHH = %f" % f(kl,kt,c2,cg,c2g)
 

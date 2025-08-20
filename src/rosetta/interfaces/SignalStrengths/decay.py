@@ -4,7 +4,7 @@ import os
 from ...internal.basis import checkers as check
 from ...internal.constants import particle_names
 from ...internal import session
-from loopfunctions import Af
+from .loopfunctions import Af
 from .errors import (SignalStrengthsNegativeWidthError, 
                      SignalStrengthsBrGtOneWarning, 
                      SignalStrengthsBrNegativeWarning)
@@ -52,7 +52,7 @@ def decay(basis, electroweak=True, SM_BRs=None, ratio=False):
     
     # Compute total width rescaling factor
     rscl['WTOT'] = 0.
-    for k, v in rscl.iteritems():
+    for k, v in rscl.items():
         if k == 'WTOT': continue
         rscl['WTOT'] += v*BRs[k]
     
@@ -65,7 +65,7 @@ def decay(basis, electroweak=True, SM_BRs=None, ratio=False):
         
         sum_BRs = 0.
         
-        for k,fact in rscl.iteritems():
+        for k,fact in rscl.items():
             PW = BRs[k]*SMwid*fact
             BRs[k] = PW/BRs['WTOT']
             

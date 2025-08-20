@@ -1,5 +1,5 @@
 ################################################################################
-import StringIO
+import io
 import re
 import sys
 import os
@@ -10,17 +10,17 @@ from itertools import combinations_with_replacement as combinations2
 ################################################################################
 from .. import SLHA
 from ..SLHA import CaseInsensitiveDict
-import checkers as check
+from . import checkers as check
 from ..matrices import (TwoDMatrix, CTwoDMatrix, HermitianMatrix, 
                       SymmetricMatrix, AntisymmetricMatrix)
 from ..constants import (PID, default_inputs, default_masses, input_names, 
                        default_ckm, particle_names, input_to_PID, 
                        PID_to_input, GammaZ, GammaW, Gammat)
 from ..errors import TranslationError, TranslationPathError, RosettaWarning
-from errors import FlavorMatrixError, ParamCardReadError
+from .errors import FlavorMatrixError, ParamCardReadError
 from .. import session
-from io import read_param_card, write_param_card
-from translator import translate
+from .io import read_param_card, write_param_card
+from .translator import translate
 ################################################################################
 __doc__ = '''
 Base class for Rosetta bases as well as some utility functions for defining the 
@@ -227,17 +227,17 @@ class Basis(MutableMapping):
     def _gen_thedict(self):
         # thedict = SLHA.CaseInsensitiveOrderedDict()
         thedict = CaseInsensitiveDict()
-        for name, blk in self.card.blocks.iteritems():
+        for name, blk in self.card.blocks.items():
             if name in self.blocks:
-                for k, v in blk.iteritems():
+                for k, v in blk.items():
                     thedict[blk.get_name(k)] = v
                     if isinstance(blk, SLHA.CBlock):
                         thedict[blk._re.get_name(k)] = v.real
                         thedict[blk._im.get_name(k)] = v.imag
                         
-        for name, blk in self.card.matrices.iteritems():
+        for name, blk in self.card.matrices.items():
             if name in self.fblocks:
-                for k, v in blk.iteritems():
+                for k, v in blk.items():
                     cname = blk.get_name(k)
                     if cname: thedict[cname] = v
                     if isinstance(blk, SLHA.CMatrix):
@@ -254,7 +254,7 @@ class Basis(MutableMapping):
         Populate self.independent and self.dependent lists according to 
         basis class definition.
         '''
-        self.all_coeffs = [c for v in self.blocks.values() for c in v]
+        self.all_coeffs = [c for v in list(self.blocks.values()) for c in v]
         # remove overlaps
         self.independent = [c for c in self.independent 
                             if c not in self.dependent]
@@ -263,7 +263,7 @@ class Basis(MutableMapping):
                                self.independent and c not in self.dependent)])
 
         # check for block names in independent
-        for k,v in self.blocks.iteritems():
+        for k,v in self.blocks.items():
             if k in self.independent and k not in self.dependent:
                 for fld in v:
                     if fld not in self.independent:
@@ -273,7 +273,7 @@ class Basis(MutableMapping):
                     except ValueError:
                         pass
                         
-        for name, opt in self.flavored.iteritems():
+        for name, opt in self.flavored.items():
             coeffs = flavor_coeffs(name, **opt)
 
             if name not in (self.independent + self.dependent):
@@ -300,7 +300,7 @@ class Basis(MutableMapping):
         
     def set_fblocks(self, option='general'):
         self.fblocks = dict()
-        for name, opt in self.flavored.iteritems():
+        for name, opt in self.flavored.items():
             opt['flavor'] = option
             coeffs = flavor_coeffs(name, **opt)
             self.fblocks[name] = coeffs
@@ -325,13 +325,13 @@ class Basis(MutableMapping):
         # default behaviour: create one 'newcoup' block, ignoring flavored
         if not self.blocks: 
             omit = ([] if not self.flavored else 
-                    [c for (k,v) in self.fblocks.items() for c in v+[k]])
+                    [c for (k,v) in list(self.fblocks.items()) for c in v+[k]])
             
             all_coeffs = [c for c in self.independent if c not in omit]
             self.blocks = {'newcoup':all_coeffs}
             
         # otherwise follow self.blocks structure
-        for blk, flds in self.blocks.iteritems():                
+        for blk, flds in self.blocks.items():                
             for i, fld in enumerate(flds):                    
                 if dependent or (blk not in self.dependent 
                                  and fld not in self.dependent):
@@ -343,7 +343,7 @@ class Basis(MutableMapping):
                     
 
         # deal with flavored
-        for blk, flds in self.fblocks.iteritems():
+        for blk, flds in self.fblocks.items():
             for fld in flds:
                 index = (int(fld[-3]), int(fld[-1])) # XBcoeff(I)x(J)               
                 if dependent or (blk not in self.dependent 
@@ -374,7 +374,7 @@ class Basis(MutableMapping):
         
         if (_from, to) in (('general', 'universal'), ('general', 'diagonal')):
             blks_to_del = []
-            for bname, blk in self.card.matrices.iteritems():
+            for bname, blk in self.card.matrices.items():
                 # only consider declared flavor matrices
                 if bname not in self.flavored: continue
                 
@@ -386,7 +386,7 @@ class Basis(MutableMapping):
                 # delete elements not present in default card
                 to_del = []
                 no_del = []
-                for k in blk.keys():
+                for k in list(blk.keys()):
                     cname = blk.get_name(k)
                     if k not in newcard.matrices[bname]:
                         if abs(blk[k]) < 1e-6:
@@ -427,7 +427,7 @@ class Basis(MutableMapping):
                 del self.card.matrices[blk]
                         
         elif to=='general':
-            for bname, blk in newcard.matrices.iteritems():
+            for bname, blk in newcard.matrices.items():
                 # only consider declared flavor matrices
                 if bname not in self.flavored: continue
                 # Add blocks absent in self.card but present in default card
@@ -436,7 +436,7 @@ class Basis(MutableMapping):
                     continue
                 
                 oneone = self.card.matrices[bname].get((1,1), 0.)
-                for k, v in blk.iteritems():
+                for k, v in blk.items():
                     # only add value if element doesn't already exist in block
                     if k in self.card.matrices[bname]: continue
 
@@ -452,14 +452,14 @@ class Basis(MutableMapping):
         Adds entries defined as dependent to the corresponding block of 
         self.card so that they can be assigned values in calculate_dependent().
         '''
-        for bname, fields in self.blocks.iteritems():
+        for bname, fields in self.blocks.items():
             theblock = self.card.blocks.get(bname,[])
             to_add = [f for f in fields if f in self.dependent 
                                         and f not in theblock]
             for entry in to_add:
                 self.card.add_entry(bname, fields.index(entry)+1, 0., name=entry)
         
-        for bname, fields in self.fblocks.iteritems():
+        for bname, fields in self.fblocks.items():
             theblock = self.card.matrices.get(bname,[])
             to_add = [f for f in fields if 
                       (f in self.dependent or bname in self.dependent)
@@ -488,7 +488,7 @@ class Basis(MutableMapping):
     def fix_matrices(self, card=None):
         if card is None:
             card = self.card
-        for name, matrix in card.matrices.iteritems():
+        for name, matrix in card.matrices.items():
             if name.lower() == 'vckm':
                 card.matrices['vckm'] = CTwoDMatrix(matrix)
             elif name not in self.flavored:
@@ -516,9 +516,9 @@ class Basis(MutableMapping):
         Deletes imaginary parts of the diagonal elements of HermitianMatrix 
         instances belonging to the basis instance.
         '''
-        for matrix in self.card.matrices.values():
+        for matrix in list(self.card.matrices.values()):
             if isinstance(matrix, HermitianMatrix):
-                for i,j in matrix.keys():
+                for i,j in list(matrix.keys()):
                     if i==j: del matrix._im._data[i,j]
     
     def delete_dependent(self):
@@ -527,7 +527,7 @@ class Basis(MutableMapping):
         respective containers.
         '''
         for container in (self.card.blocks, self.card.matrices):
-            for name, blk in container.iteritems():
+            for name, blk in container.items():
                 if name in self.dependent:
                     del container[name]
                 else:    
