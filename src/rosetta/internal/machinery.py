@@ -2,8 +2,7 @@
 from operator import itemgetter
 import inspect
 
-from ..bases import __all__ as basisnames
-from ..bases import *
+from ..bases import _all_bases as bases
 from .errors import TranslationPathError, BasesError, RelationshipsError
 ################################################################################
 __doc__ = '''
@@ -51,19 +50,6 @@ def djik(graph, source):
                 prev[v] = u
 
     return prev
-
-# Collect basis classes in base directory of Rosetta according to their name
-modules = {b:v for b,v in globals().items() if b in basisnames}
-bases = {}
-for bname, module in modules.items():
-    try:
-        bclass = module.__dict__[bname]
-        if not inspect.isclass(bclass):
-            raise KeyError
-        bases[bclass.name] = bclass
-    except KeyError:
-        print(('Warning: Rosetta did not find a class named ' +
-               '{0} in {0}.py. File ignored.'.format(bname) ))
 
 if not bases: raise BasesError('No valid basis implementations found.')
 # Build dictionary of all basis classes and their implemented translation 

@@ -1,34 +1,21 @@
-from importlib import import_module
 from collections import OrderedDict
-import os
 
-from ..internal import session
-from ..internal.errors import RosettaImportError
+from .DefaultCard import DefaultCardInterface
+from .dihiggs import DiHiggsInterface
+from .eHDECAY import eHDECAYInterface
+from .EWPO import EWPOInterface
+from .Lilith import LilithInterface
+from .SignalStrengths import SignalStrengthsInterface
+from .Translate import TranslateInterface
 
-from .errors import LoadInterfaceError
+__all__ = [
+    "DefaultCardInterface",
+    "DiHiggsInterface",
+    "eHDECAYInterface",
+    "EWPOInterface",
+    "LilithInterface",
+    "SignalStrengthsInterface",
+    "TranslateInterface"
+]
 
-_all_interfaces = OrderedDict()
-
-# Assumes all subdirectories are interface implementations
-subdirs =  next(os.walk(os.path.dirname(__file__)))[1]
-
-for intr in subdirs:
-    try:
-        intr_mod = import_module('.'+intr, 'Rosetta.interfaces')
-
-        intr_class = '{0}Interface'.format(intr)
-        
-        _all_interfaces[intr_class] = getattr(intr_mod, intr_class)
-                                            
-    except ImportError as ee:
-        msg = "Warning: Rosetta couldn't load {} interface.\n    Error:{}.\n".format(intr, ee)
-        session.log(msg)
-        
-    except AttributeError as ee:
-        msg = "Warning: Rosetta couldn't load {0}Interface Class from {0} module.\n    Error:{1}.\n".format(intr, ee)
-        session.log(msg)
-
-if 'TranslateInterface' not in _all_interfaces:
-    msg = "Rosetta couldn't find the translate interface!"
-    raise LoadInterfaceError(msg)
-
+_all_interfaces = OrderedDict({k: globals()[k] for k in __all__})

@@ -1,11 +1,21 @@
-import os
+from .BSMCharacterisation import BSMCharacterisation
+from .HiggsBasis import HiggsBasis
+from .HiggsCharacterisation import HiggsCharacterisation
+from .HiggsPO import HiggsPO
+from .HISZ import HISZ
+from .SILHBasis import SILHBasis
+from .TemplateBasis import TemplateBasis
+from .WarsawBasis import WarsawBasis
 
-from ..internal import basis
-from ..internal.constants import PID
-from ..internal.matrices import matrix_mult, matrix_add, matrix_sub, matrix_eq
+__all__ = [
+    "BSMCharacterisation",
+    "HiggsBasis",
+    "HiggsCharacterisation",
+    "HiggsPO",
+    "HISZ",
+    "SILHBasis",
+    "TemplateBasis",
+    "WarsawBasis",
+]
 
-files = os.listdir(os.path.dirname(__file__))
-
-__all__ = [f.replace('.py','') for f in files
-         if '.py'==f[-3:] and f!='__init__.py']
-
+_all_bases = {k: globals()[k] for k in __all__}

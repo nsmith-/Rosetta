@@ -1,4 +1,3 @@
-from distutils.version import StrictVersion
 import sys
 # from .. import config
 from ...internal.settings import config
@@ -27,20 +26,5 @@ except ImportError:
     raise LilithImportError(err)
 except Exception as err:
     raise LilithImportError(err)
-# Lilith path
-try:
-    from . import lilith
-except ImportError:
-    try:
-        Lilith_dir = config['Lilith_dir']
-        sys.path.append(Lilith_dir)
-        from . import lilith
-    except KeyError:
-        err = ('Could not find option "Lilith_dir" in Rosetta/config.txt')
-        raise LilithImportError(err)
-    except ImportError:
-        err = ('check Lilith_dir option in '
-               'Rosetta/config.txt')
-        raise LilithImportError(err)
 ################################################################################
 from .interface import LilithInterface

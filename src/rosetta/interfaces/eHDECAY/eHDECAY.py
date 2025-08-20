@@ -11,8 +11,8 @@ from ...internal.constants import (particle_names, default_masses,
 
 from ...internal.basis import checkers as check
 from ...internal import session, SLHA
+from ...internal.settings import config
 
-from . import executable
 from .errors import (eHDECAYInterfaceError, eHDECAYImportError, 
                      eHDECAYNegativeWidthError, eHDECAYBrGtOneWarning,
                      eHDECAYBrNegativeWarning)
@@ -47,6 +47,23 @@ reference = ('R. Contino et al., Comput.Phys.Commun. 185 (2014) 3412\n'
              'Comput.Phys.Commun. 108 (1998) 56 \n')
             
 ################################################################################
+def _locate_executable():
+    # eHDECAY executable
+    try:
+        eHDECAY_dir = config['eHDECAY_dir']
+    except KeyError:
+        err = ('Could not find option "eHDECAY_dir" in Rosetta/config.txt')
+        raise eHDECAYImportError(err)
+        
+    executable = '{}/run'.format(eHDECAY_dir)
+
+    if not os.path.exists(executable):
+        err = (('Could not find eHDECAY executable at {}: check option '
+                '"eHDECAY_dir" in Rosetta/config.txt').format(executable))
+        raise eHDECAYImportError(err)
+
+    return executable
+
 def create_SLHA_block(basis, electroweak=True):
     '''
     Interface Rosetta with eHDECAY to calculate Higgs widths and branching
@@ -56,7 +73,7 @@ def create_SLHA_block(basis, electroweak=True):
     try:
         BRs = run(basis, electroweak=True)
         # BR2 = run(basis, interpolate=True)
-    except eHDECAYInterfaceError:
+    except eHDECAYInterfaceError as e:
         print(e)
         return
 
@@ -146,10 +163,7 @@ def execute(inpt):
     Keyword arguments:  
         electroweak - switch for electroweak corrections, IELW
     '''
-    # if not os.path.exists(executable):
-    #     err = ('Rosetta: could not find eHDECAY ' +
-    #            'executable in {}'.format(eHDECAY_dir))
-    #     raise eHDECAYInterfaceError(err)
+    executable = _locate_executable()
         
     session.cite('eHDECAY', reference)
     
