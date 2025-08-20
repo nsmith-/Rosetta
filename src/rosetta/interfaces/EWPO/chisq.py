@@ -26,7 +26,7 @@ def chisq(c, flavor='general'):
     else:
         deltac = np.array(c) - c0
         sinv2 = sigmainv2
-    return float(np.mat(deltac)*np.mat(sinv2)*np.mat(deltac).T)
+    return float(deltac @ sinv2 @ deltac.T)
 
 def pvalue(csq, flavor='general'):
     if flavor=='universal':
