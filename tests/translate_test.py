@@ -212,7 +212,7 @@ def generate_frdef(basis_class,filename):
                 
     print('wrote ',filename)
 
-if __name__=='__main__':
+def test_translation(request):
     # pass
     settings.silent=False
     settings.verbose=True
@@ -262,33 +262,33 @@ if __name__=='__main__':
 
     # #
 ################################################################################
-    os.chdir('Cards')
+    cards_dir = request.path.parent / 'Cards'
 # translation testers
 # Two way tests
 
-    two_way_test(SB.SILHBasis,'SILHBasis_general_rand.dat','higgs')
-    two_way_test(SB.SILHBasis,'SILHBasis_diagonal_rand.dat','higgs',flavor='diagonal')
-    two_way_test(SB.SILHBasis,'SILHBasis_universal_rand.dat','higgs',flavor='universal')
+    two_way_test(SB.SILHBasis,cards_dir / 'SILHBasis_general_rand.dat','higgs')
+    two_way_test(SB.SILHBasis,cards_dir / 'SILHBasis_diagonal_rand.dat','higgs',flavor='diagonal')
+    two_way_test(SB.SILHBasis,cards_dir / 'SILHBasis_universal_rand.dat','higgs',flavor='universal')
 
-    two_way_test(SB.SILHBasis,'SILHBasis_general_rand.dat','warsaw')
-    two_way_test(SB.SILHBasis,'SILHBasis_diagonal_rand.dat','warsaw',flavor='diagonal')
-    two_way_test(SB.SILHBasis,'SILHBasis_universal_rand.dat','warsaw',flavor='universal')
+    two_way_test(SB.SILHBasis,cards_dir / 'SILHBasis_general_rand.dat','warsaw')
+    two_way_test(SB.SILHBasis,cards_dir / 'SILHBasis_diagonal_rand.dat','warsaw',flavor='diagonal')
+    two_way_test(SB.SILHBasis,cards_dir / 'SILHBasis_universal_rand.dat','warsaw',flavor='universal')
 
-    two_way_test(WB.WarsawBasis,'WarsawBasis_general_rand.dat','higgs')
-    two_way_test(WB.WarsawBasis,'WarsawBasis_diagonal_rand.dat','higgs',flavor='diagonal')
-    two_way_test(WB.WarsawBasis,'WarsawBasis_universal_rand.dat','higgs',flavor='universal')
+    two_way_test(WB.WarsawBasis,cards_dir / 'WarsawBasis_general_rand.dat','higgs')
+    two_way_test(WB.WarsawBasis,cards_dir / 'WarsawBasis_diagonal_rand.dat','higgs',flavor='diagonal')
+    two_way_test(WB.WarsawBasis,cards_dir / 'WarsawBasis_universal_rand.dat','higgs',flavor='universal')
 
-    two_way_test(WB.WarsawBasis,'WarsawBasis_general_rand.dat','silh')
-    two_way_test(WB.WarsawBasis,'WarsawBasis_diagonal_rand.dat','silh',flavor='diagonal')
-    two_way_test(WB.WarsawBasis,'WarsawBasis_universal_rand.dat','silh',flavor='universal')
+    two_way_test(WB.WarsawBasis,cards_dir / 'WarsawBasis_general_rand.dat','silh')
+    two_way_test(WB.WarsawBasis,cards_dir / 'WarsawBasis_diagonal_rand.dat','silh',flavor='diagonal')
+    two_way_test(WB.WarsawBasis,cards_dir / 'WarsawBasis_universal_rand.dat','silh',flavor='universal')
 
-    two_way_test(HB.HiggsBasis,'HiggsBasis_general_rand.dat','warsaw')
-    two_way_test(HB.HiggsBasis,'HiggsBasis_diagonal_rand.dat','warsaw',flavor='diagonal')
-    two_way_test(HB.HiggsBasis,'HiggsBasis_universal_rand.dat','warsaw',flavor='universal')
+    two_way_test(HB.HiggsBasis,cards_dir / 'HiggsBasis_general_rand.dat','warsaw')
+    two_way_test(HB.HiggsBasis,cards_dir / 'HiggsBasis_diagonal_rand.dat','warsaw',flavor='diagonal')
+    two_way_test(HB.HiggsBasis,cards_dir / 'HiggsBasis_universal_rand.dat','warsaw',flavor='universal')
 
-    two_way_test(HB.HiggsBasis,'HiggsBasis_general_rand.dat','silh')
-    two_way_test(HB.HiggsBasis,'HiggsBasis_diagonal_rand.dat','silh',flavor='diagonal')
-    two_way_test(HB.HiggsBasis,'HiggsBasis_universal_rand.dat','silh',flavor='universal')
+    two_way_test(HB.HiggsBasis,cards_dir / 'HiggsBasis_general_rand.dat','silh')
+    two_way_test(HB.HiggsBasis,cards_dir / 'HiggsBasis_diagonal_rand.dat','silh',flavor='diagonal')
+    two_way_test(HB.HiggsBasis,cards_dir / 'HiggsBasis_universal_rand.dat','silh',flavor='universal')
 ################################################################################
 # translation testers 
 # Circle tests   

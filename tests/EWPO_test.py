@@ -55,22 +55,24 @@ def create_input(H):
                 H['cll1133'], (H['cle1133']+H['cle3311']) ,
                 H['cee1133'], H['cll2332']]
 
-# H = HB.HiggsBasis(flavor='universal', param_card='Cards/HiggsBasis_universal_1e-3.dat')
-# H = HB.HiggsBasis(flavor='universal', param_card='Cards/HiggsBasis_universal.dat')
-S = SB.SILHBasis(flavor='universal', param_card='Cards/SILHBasis_universal_1e-3.dat')
-H = S.translate(target='higgs')
-inp = create_input(H)
-print(chisq_and_pvalue(inp, flavor=H.flavor))
+def test_EWPO(request):
+    cards_dir = request.path.parent / 'Cards'
+    # H = HB.HiggsBasis(flavor='universal', param_card=cards_dir / 'HiggsBasis_universal_1e-3.dat')
+    # H = HB.HiggsBasis(flavor='universal', param_card=cards_dir / 'HiggsBasis_universal.dat')
+    S = SB.SILHBasis(flavor='universal', param_card=cards_dir / 'SILHBasis_universal_1e-3.dat')
+    H = S.translate(target='higgs')
+    inp = create_input(H)
+    print(chisq_and_pvalue(inp, flavor=H.flavor))
 
 
-# instance = HZ.HISZ(flavor='universal', param_card = '../HISZ_universal_1e-3.dat', translate=False)
-# instance = HZ.HISZ(flavor='universal', param_card = '../HISZ_universal_0.dat', translate=False)
+    # instance = HZ.HISZ(flavor='universal', param_card = '../HISZ_universal_1e-3.dat', translate=False)
+    # instance = HZ.HISZ(flavor='universal', param_card = '../HISZ_universal_0.dat', translate=False)
 
-# bsmc = basis.translate(target='bsmc')
+    # bsmc = basis.translate(target='bsmc')
 
 
-# lik = Lilith.compute_likelihood(instance)
+    # lik = Lilith.compute_likelihood(instance)
 
-# session.log('Lilith Likelihood: '+str(lik))
-# session.log('#############################')
-# session.log('')
+    # session.log('Lilith Likelihood: '+str(lik))
+    # session.log('#############################')
+    # session.log('')
