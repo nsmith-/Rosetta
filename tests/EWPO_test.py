@@ -5,7 +5,6 @@ import sys
 import re
 import random
 
-sys.path.append('../')
 
 from rosetta import HiggsBasis as HB
 from rosetta import WarsawBasis as WB
@@ -61,7 +60,7 @@ def create_input(H):
 S = SB.SILHBasis(flavor='universal', param_card='Cards/SILHBasis_universal_1e-3.dat')
 H = S.translate(target='higgs')
 inp = create_input(H)
-print chisq_and_pvalue(inp, flavor=H.flavor)
+print(chisq_and_pvalue(inp, flavor=H.flavor))
 
 
 # instance = HZ.HISZ(flavor='universal', param_card = '../HISZ_universal_1e-3.dat', translate=False)

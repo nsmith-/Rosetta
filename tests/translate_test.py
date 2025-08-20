@@ -5,8 +5,6 @@ import sys
 import re
 import random
 
-sys.path.append('../')
-
 from rosetta import HiggsBasis as HB
 from rosetta import WarsawBasis as WB
 from rosetta import SILHBasis as SB
@@ -24,10 +22,10 @@ Some tester functions to validate translations, generate sample input cards etc.
 
 def compare_inputs(basis1, basis2, tolerance=1e-4, verbose=False):
     wrong_inputs = []
-    if verbose: print '\t{}\t{}'.format(basis1.name,basis2.name)
-    for _input,value in basis1.inputs.items():
+    if verbose: print('\t{}\t{}'.format(basis1.name,basis2.name))
+    for _input,value in list(basis1.inputs.items()):
         other_value = basis2.inputs[_input]
-        if verbose: print _input, value, other_value
+        if verbose: print(_input, value, other_value)
         if abs(value - other_value) > tolerance*abs(value):
             wrong_inputs.append([basis1.inputs._names[_input],
                                  ('{}:'.format(basis1.__class__.__name__),
@@ -37,19 +35,19 @@ def compare_inputs(basis1, basis2, tolerance=1e-4, verbose=False):
                                 ])
  
     if wrong_inputs:
-        print 'Some inconsistent SM inputs detected:'
+        print('Some inconsistent SM inputs detected:')
         for w in wrong_inputs:
-            print w[0]
-            print w[1]
+            print(w[0])
+            print(w[1])
     else:
-        print 'Inputs are OK!'
+        print('Inputs are OK!')
         
 def compare_coeffs(basis1, basis2, tolerance=1e-4, verbose=False):
     wrong_coeffs = []
-    if verbose: print '\t{}\t{}'.format(basis1.name,basis2.name)
+    if verbose: print('\t{}\t{}'.format(basis1.name,basis2.name))
     for coeff in basis1.all_coeffs:
         c1, c2 = basis1[coeff], basis2[coeff]
-        if verbose: print coeff, c1,c2
+        if verbose: print(coeff, c1,c2)
         if abs(c1 - c2) > tolerance*abs(c1) and abs(c1 - c2) > 1e-15:
             wrong_coeffs.append([coeff,
                                  ('{}:'.format(basis1.__class__.__name__), c1,
@@ -58,10 +56,10 @@ def compare_coeffs(basis1, basis2, tolerance=1e-4, verbose=False):
     for matrix in basis1.flavored:
         if matrix not in basis1.card: continue
         b1, b2 = basis1.card.matrices[matrix], basis2.card.matrices[matrix]
-        if verbose: print matrix
-        for k,c1 in b1.iteritems():
+        if verbose: print(matrix)
+        for k,c1 in b1.items():
             c2 = b2[k]
-            if verbose: print k, c1,c2 
+            if verbose: print(k, c1,c2) 
             coeff = b1._names[k]
             if abs(c1 - c2) > tolerance*abs(c1) and abs(c1 - c2) > 1e-15:
                 wrong_coeffs.append([coeff,
@@ -70,12 +68,12 @@ def compare_coeffs(basis1, basis2, tolerance=1e-4, verbose=False):
                                     ])
     
     if wrong_coeffs:
-        print 'Some inconsistent coefficients detected:'
+        print('Some inconsistent coefficients detected:')
         for w in wrong_coeffs:
-            print w[0]
-            print w[1]
+            print(w[0])
+            print(w[1])
     else:
-        print 'Coeffs are OK!'
+        print('Coeffs are OK!')
 
 def higgs_basis_check(MyBasis,param_card,tolerance=1e-4):
     
@@ -161,29 +159,29 @@ def generate_coeffs(basis_class, val, rand=False):
     myinstance = basis_class()
     SLHA_card = myinstance.card
     # print myinstance.independent
-    for name, blk in SLHA_card.blocks.iteritems():
+    for name, blk in SLHA_card.blocks.items():
         for coeff in blk:
             if blk.get_name(coeff) not in myinstance.independent:
                 del blk[coeff]
             else:
                 blk[coeff]=val if not rand else 1e-2*random.uniform(-1.,1.)
-    for name, blk in SLHA_card.blocks.iteritems():
+    for name, blk in SLHA_card.blocks.items():
         if len(blk)==0:
             del SLHA_card.blocks[name]
-    for name, blk in myinstance.card.blocks.iteritems():
-        print blk
+    for name, blk in myinstance.card.blocks.items():
+        print(blk)
         
 def generate_frdef(basis_class,filename):
     myinstance = basis_class()
     SLHA_card = myinstance.card
-    for name, blk in SLHA_card.blocks.iteritems():
+    for name, blk in SLHA_card.blocks.items():
         for coeff in blk:
             if blk.get_name(coeff) not in myinstance.independent:
                 del blk[coeff]
     with open(filename,'w') as out:
-        for name, blk in myinstance.card.blocks.iteritems():
+        for name, blk in myinstance.card.blocks.items():
             bname = blk.name
-            for index, value in blk.iteritems():
+            for index, value in blk.items():
                 cname = blk.get_name(index)
                 is_sin = re.match(r'S[ude]\d\d',cname)
                 out.write('{} == {{ ParameterType -> External,\n'.format(cname))
@@ -201,7 +199,7 @@ def generate_frdef(basis_class,filename):
                     out.write('   Value -> Sqrt[1-{}^2],\n'.format(cname))
                     out.write('   Description -> "{} coupling parameter"}},\n'.format(cos))
                     out.write('\n')
-            for real in [blk.get_name(x) for x in blk.keys() 
+            for real in [blk.get_name(x) for x in list(blk.keys()) 
                                 if blk.get_name(x)[-2:]=='Re' ]:
                 name = real.replace('Re','')
                 imag = real.replace('Re','Im')
@@ -212,7 +210,7 @@ def generate_frdef(basis_class,filename):
                 out.write('   Description -> "{} coupling parameter"}},\n'.format(name))
                 out.write('\n')
                 
-    print 'wrote ',filename
+    print('wrote ',filename)
 
 if __name__=='__main__':
     # pass

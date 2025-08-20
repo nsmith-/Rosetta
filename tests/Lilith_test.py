@@ -5,8 +5,6 @@ import sys
 import re
 import random
 
-sys.path.append('../')
-
 from rosetta import HiggsBasis as HB
 from rosetta import WarsawBasis as WB
 from rosetta import SILHBasis as SB

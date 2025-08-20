@@ -1,7 +1,5 @@
 import sys
 
-sys.path.append('../')
-
 from logger import Logger
 
 class A(object):
