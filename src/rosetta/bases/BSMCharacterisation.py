@@ -3,7 +3,7 @@ from math import sqrt, pi
 import re
 # from warnings import warn
 
-from . import basis
+from ..internal import basis
 from ..internal import PID
 from ..internal import matrix_mult, matrix_add, matrix_sub, matrix_eq
 from ..internal.errors import TranslationWarning
