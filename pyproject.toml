@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "rosetta"
 authors = [
-  { name = "Ken Mimasu", email = "mimasu@example.com" },
+  { name = "Ken Mimasu", email = "ken.mimasu@soton.ac.uk" },
 ]
 description = "Rosetta: an operator basis translator for Standard Model effective field theory"
 readme = "README.md"
@@ -32,10 +32,9 @@ test = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/nsmith-/beamline"
-"Bug Tracker" = "https://github.com/nsmith-/beamline/issues"
-Discussions = "https://github.com/nsmith-/beamline/discussions"
-Changelog = "https://github.com/nsmith-/beamline/releases"
+Homepage = "http://rosetta.hepforge.org"
+"Bug Tracker" = "https://github.com/kenmimasu/Rosetta/issues"
+Changelog = "https://github.com/kenmimasu/Rosetta/releases"
 
 
 [tool.hatch]
